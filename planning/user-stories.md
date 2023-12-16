@@ -1,6 +1,4 @@
-# Airplane Listing Web App
-
-## User Stories
+## User Stories for <App Name>
 
 ### SELLER:
 1. As a seller, I want to be able to sell charter airplanes online so that potential airplane buyers can find my listings.
