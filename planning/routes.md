@@ -1,14 +1,24 @@
 // home page
-Browse -- GET /planes
+GET /
 
 // user listings
-Read ---- GET /listing/:id
+GET /listings/user/:userId
+
+// user favorites
+GET /listings/user/:userId/favorites
+
+// search listings
+GET /listings/:id
+queryParams could be id, year, make, condition, etc
 
 // edit user listing
-Edit ---- POST /listing:id
-
-// add a new plane listing
-Add ----- POST /planes
+POST /listings:id
 
 // delete a listing
-Delete -- POST /listing/:id/delete
+POST /listings/:id/delete
+
+// add a new plane listing
+POST /listings
+
+// add a listing to favorites
+POST /listings/:id/favorites
