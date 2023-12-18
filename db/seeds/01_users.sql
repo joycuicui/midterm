@@ -1,3 +1,28 @@
 -- Users table seeds here (Example)
-INSERT INTO users (name) VALUES ('Alice');
-INSERT INTO users (name) VALUES ('Kira');
+INSERT INTO users (name, email, password) VALUES
+('Joy','joy@email.com','abc123'),
+('Christel','christel@email.com', 'abc123'),
+('Koran','koran@email.com', 'abc123'),
+('Alice','alice@email.com', 'abc123'),
+('Kira','kira@email.com', 'abc123'),
+('Ethan','ethan@email.com', 'abc123'),
+('Olivia','olivia@email.com', 'abc123'),
+('Liam','liam@email.com', 'abc123'),
+('Ava','ava@email.com', 'abc123'),
+('Noah','noah@email.com', 'abc123'),
+('Sophia','sophia@email.com', 'abc123'),
+('Jackson','jackson@email.com', 'abc123'),
+('Emma','emma@email.com', 'abc123'),
+('Aiden','aiden@email.com', 'abc123'),
+('Mia','mia@email.com', 'abc123'),
+('Lucas','lucas@email.com', 'abc123'),
+('Isabella','isabella@email.com', 'abc123'),
+('Caleb','caleb@email.com', 'abc123'),
+('Harper','harper@email.com', 'abc123'),
+('Benjamin','bejamin@email.com', 'abc123'),
+('Amelia','amelia@email.com', 'abc123'),
+('Oliver','oliver@email.com', 'abc123'),
+('Abigail','abigail@email.com', 'abc123'),
+('Samuel','samuel@email.com', 'abc123'),
+('Grace','grace@email.com', 'abc123'),
+('Kira','kira@email.com', 'abc123');
