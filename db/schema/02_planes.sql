@@ -18,7 +18,7 @@ CREATE TABLE planes (
   year INTEGER NOT NULL,
   make VARCHAR(255) NOT NULL,
   model VARCHAR(255) NOT NULL,
-  class VARCHAR(255) NOT NULL,
+  planes_class VARCHAR(255) NOT NULL,
   airframe_hours INTEGER NOT NULL,
   engine_hours INTEGER NOT NULL,
   date_posted TIMESTAMP NOT NULL,
