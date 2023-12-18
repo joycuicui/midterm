@@ -18,10 +18,10 @@ $(() => {
         </div>
       <nav class="nav-bar">
           <ul class="nav-bar-items">
-            <li>Home</li>
-            <li>Search</li>
-            <li>Log In</li>
-            <li>Sign Up</li>
+            <li class="home">Home</li>
+            <li class="search">Search</li>
+            <li class="login">Log In</li>
+            <li class="signup">Sign Up</li>
           </ul>
         </nav>
       `;
@@ -33,13 +33,13 @@ $(() => {
         </div>
       <nav class="nav-bar">
           <ul class="nav-bar-items">
-            <li>Home</li>
-            <li>Search</li>
-            <li>Sell</li>
-            <li>Listings</li>
-            <li>Favorites</li>
-            <li>Messages</li>
-            <li>Log out</li>
+            <li class="home">Home</li>
+            <li class="search">Search</li>
+            <li class="sell">Sell</li>
+            <li class="my-listings">Listings</li>
+            <li class="my-likes">Favorites</li>
+            <li class="messages">Messages</li>
+            <li class="logout">Log out</li>
           </ul>
         </nav>
       `;
@@ -53,4 +53,29 @@ $(() => {
   // testing: when there is no user logged in
   // const testUser = null;
   window.header.update(testUser);
+
+  ////////////////////////////////////////////////////////////////////////
+  /// event listeners for header elements: home, search, myListing...
+  ////////////////////////////////////////////////////////////////////////
+  $("$header").on("click", ".home", function () {
+    // 1. clear listings
+    // 2. get all listings
+    // 3. show listings
+  });
+
+  $("$header").on("click", ".search", function () {});
+
+  $("$header").on("click", ".sell", function () {});
+
+  $("$header").on("click", ".my-listings", function () {
+    // 1. clear listings
+    // 2. get all listings(pass user_id as argument)
+    // 3. show listings
+  });
+
+  $("$header").on("click", ".my-likes", function () {});
+  $("$header").on("click", ".messages", function () {});
+  $("$header").on("click", ".login", function () {});
+  $("$header").on("click", ".signup", function () {});
+  $("$header").on("click", ".logout", function () {});
 });
