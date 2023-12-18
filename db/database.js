@@ -1,5 +1,12 @@
 const db = require("../db/connection");
 
+////////////////////////////////////////////////////////////////////////////////////////////////
+/// USERS
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+/// LISTINGS
+////////////////////////////////////////////////////////////////////////////////////////////////
 const getAllPlanes = function (options, limit = 10) {
   const queryParams = [];
 
@@ -52,4 +59,26 @@ const getAllPlanes = function (options, limit = 10) {
   return db.query(queryString, queryParams).then((res) => res.rows);
 };
 
-module.exports = { getAllPlanes };
+const getMyListings = function (user_id, limit = 10) {
+  return db
+    .query(
+      `
+        SELECT 
+        FROM planes.*
+        JOIN users ON users.id = owner_id
+        WHERE users.id = $1
+        GROUP BY users.id
+        ORDER BY price
+        LIMIT $2;`,
+      [user_id, limit]
+    )
+    .then((result) => {
+      // console.log("result.rows:", result.rows);
+      return result.rows;
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+};
+
+module.exports = { getAllPlanes, getMyListings };
