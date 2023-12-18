@@ -1,7 +1,7 @@
 @import "./variables";
 
 .header {
-  height: 80vh;
+  height: 90vh;
   background-image: linear-gradient(rgba($blue, 0.9), rgba($blue, 0.9)),
     url("https://images.pexels.com/photos/19354200/pexels-photo-19354200/free-photo-of-planes-flying-in-blue-sky.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
   background-size: cover;
@@ -39,7 +39,7 @@
   justify-content: space-between;
 }
 
-.nav-bar-items :hover {
+.nav-bar-items li:hover {
   cursor: pointer;
   background-color: $yellow-dark;
 }
