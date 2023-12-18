@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Sell Page</title>
+
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" />
+    <link rel="stylesheet" href="/vendor/border-box.css" />
+    <link rel="stylesheet" href="/styles/main.css" />
+    <link rel="stylesheet" href="/styles/layout.css" />
+    <link rel="stylesheet" href="/styles/sellForm.css" />
+
+    <!-- font awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <script src="/vendor/jquery-3.0.0.js"></script>
+    <script defer src="/scripts/app.js"></script>
+  </head>
+
+  <body>
+    <header class="header"></header>
+    <section class="search-box">
+      <h2>SELL YOUR PLANE</h2>
+      <form id="planeForm" class="planeForm" action="/" method="post">
+        <div class="form-left">
+          <input
+            type="text"
+            id="title"
+            name="title"
+            placeholder="Title"
+            required
+          />
+          <input
+            type="number"
+            id="price"
+            name="price"
+            placeholder="Price"
+            required
+          />
+          <textarea
+            id="description"
+            name="description"
+            rows="4"
+            placeholder="Description"
+            required
+          ></textarea>
+
+          <input
+            type="text"
+            id="condition"
+            name="condition"
+            placeholder="Condition"
+            required
+          />
+          <div class="input-inline">
+            <input
+              type="text"
+              id="make"
+              name="make"
+              placeholder="Make"
+              required
+            />
+
+            <input
+              type="text"
+              id="model"
+              name="model"
+              placeholder="Model"
+              required
+            />
+          </div>
+          <input
+            type="text"
+            id="class"
+            name="class"
+            placeholder="Class"
+            required
+          />
+          <div class="input-inline">
+            <input
+              type="number"
+              id="airframeHours"
+              name="airframe_hours"
+              placeholder="Airframe Hours"
+              required
+            />
+
+            <input
+              type="number"
+              id="engineHours"
+              name="engine_hours"
+              placeholder="Engine Hours"
+              required
+            />
+          </div>
+          <input
+            type="url"
+            id="photoUrl"
+            name="photo_url"
+            placeholder="Photo URL"
+            required
+          />
+        </div>
+        <div class="form-right">
+          <button type="submit">Submit</button>
+        </div>
+      </form>
+    </section>
+    <script src="/javascript/header.js"></script>
+  </body>
+</html>

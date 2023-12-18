@@ -1,0 +1,60 @@
+.header {
+  background-image: none;
+  height: 10vh;
+}
+.search-box {
+  width: 70vw;
+  margin: 3rem auto;
+  padding: 5rem;
+  border-radius: 15px;
+}
+.search-box h2 {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+.planeForm {
+  display: flex;
+  justify-content: space-around;
+}
+.form-left {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+}
+input {
+  outline: none;
+  margin-top: 2rem;
+  padding: 1rem 5rem;
+  border-color: #c69963;
+  border-radius: 2rem;
+  border-width: 3px;
+}
+
+textarea {
+  margin-top: 2rem;
+  padding: 1rem 5rem;
+  border-color: #c69963;
+  border-radius: 2rem;
+  border-width: 3px;
+}
+.form-right {
+  display: flex;
+  align-items: center;
+}
+button {
+  color: white;
+  background-color: #c69963;
+  border: none;
+  font-weight: bold;
+  padding: 2rem 4rem;
+  border-radius: 5rem;
+  cursor: pointer;
+}
+.input-inline {
+  display: flex;
+}
+.input-inline input {
+  margin-right: 5px;
+  display: inline-block;
+  width: 55%;
+}
