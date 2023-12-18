@@ -2,7 +2,7 @@
 INSERT INTO users (name, email, password) VALUES
 ('Joy','joy@email.com','abc123'),
 ('Christel','christel@email.com', 'abc123'),
-('Koran','koran@email.com', 'abc123'),
+('Karan','koran@email.com', 'abc123'),
 ('Alice','alice@email.com', 'abc123'),
 ('Kira','kira@email.com', 'abc123'),
 ('Ethan','ethan@email.com', 'abc123'),
