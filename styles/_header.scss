@@ -18,6 +18,10 @@
   align-items: center;
   text-transform: uppercase;
   font-weight: bold;
+  // newly added
+  width: 100%;
+  position: fixed;
+  z-index: 10;
 }
 
 .logo {
