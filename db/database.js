@@ -3,6 +3,19 @@ const db = require("../db/connection");
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /// USERS
 ////////////////////////////////////////////////////////////////////////////////////////////////
+const getUserWithEmail = function (email) {
+  return pool
+    .query(`SELECT * FROM users WHERE email = $1;`, [email])
+    .then((result) => {
+      // console.log("result.rows:", result.rows);
+      // console.log("result.rows[0]", result.rows[0]);
+      const user = result.rows[0];
+      return user || null;
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /// LISTINGS
@@ -71,4 +84,4 @@ const getMyListings = function (user_id, limit = 10) {
     });
 };
 
-module.exports = { getPlanes, getMyListings };
+module.exports = { getPlanes, getMyListings, getUserWithEmail };
