@@ -168,15 +168,23 @@ const $search = $(`
     </section>
   `);
 
-const $planeListings = $(`
-    <section class="all-listings">
-      <div class="divider">
-        <div class="divider-line"></div>
-        <h2 class="divider-text">Featured Listings</h2>
-        <div class="divider-line"></div>
-      </div>
-    </section> 
-    `);
+const $planeListings = $(".all-listings");
+// const $planeListings = $(`
+//     <section class="all-listings">
+//       <div class="divider">
+//         <div class="divider-line"></div>
+//         <h2 class="divider-text">Featured Listings</h2>
+//         <div class="divider-line"></div>
+//       </div>
+//     </section>
+//     `);
+const $divider = $(`
+  <div class="divider">
+    <div class="divider-line"></div>
+    <h2 class="divider-text">Featured Listings</h2>
+    <div class="divider-line"></div>
+  </div>
+`);
 
 const createListing = function (plane) {
   return `
@@ -215,7 +223,9 @@ const renderListings = function (listings) {
   //   const listing = listings[id];
   //   $planeListings.prepend(createListing(listing));
   // }
+  $planeListings.append($divider);
   console.log("listings:", listings);
+
   listings.forEach((plane) => {
     const $listing = createListing(plane);
     $planeListings.append($listing);
