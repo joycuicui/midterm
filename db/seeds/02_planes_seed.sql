@@ -49,7 +49,7 @@ INSERT INTO planes (
     FALSE,
     '2021-02-15 13:30'),
 (   1,
-  '1973 PIPER ARROW, Single Engine Piston',
+  '1973 PIPER ARROW',
   '1973 Piper Arrow For Sale.',
   'Used',
   1973,
