@@ -49,16 +49,6 @@ const runSeedFiles = async () => {
   }
 };
 
-const runMigrationFiles = async () => {
-  console.log(chalk.cyan(`-> Running Migration Files ...`));
-  const migrationFilenames = fs.readdirSync('./db/migrations');
-
-  for (const fn of migrationFilenames) {
-    const sql = fs.readFileSync(`./db/migrations/${fn}`, 'utf8');
-    console.log(`\t-> Running ${chalk.green(fn)}`);
-    await db.query(sql);
-  }
-};
 
 const runResetDB = async () => {
   try {
@@ -67,7 +57,7 @@ const runResetDB = async () => {
 
     await runSchemaFiles();
     await runSeedFiles();
-    await runMigrationFiles();
+
     process.exit();
   } catch (err) {
     console.error(chalk.red(`Failed due to error: ${err}`));
