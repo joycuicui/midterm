@@ -58,6 +58,13 @@ const $sell = $(`
         placeholder="Price"
         required
       />
+      <input
+        type="number"
+        id="sell-year"
+        name="year"
+        placeholder="Year"
+        required
+      />
       <textarea
         id="description"
         name="description"
@@ -68,13 +75,13 @@ const $sell = $(`
 
       <input
         type="text"
-        id="condition"
+        id="sell-condition"
         name="condition"
         placeholder="Condition"
         required
       />
       <div class="input-inline">
-        <input type="text" id="make" name="make" placeholder="Make" required />
+        <input type="text" id="sell-make" name="make" placeholder="Make" required />
 
         <input
           type="text"
@@ -291,8 +298,8 @@ $(() => {
       const formData = {
         year: $("#year").val(),
         condition: $("#condition").val(),
-        minprice: $("#minprice").val(),
-        maxprice: $("#maxprice").val(),
+        minimum_price: $("#minprice").val(),
+        maximum_price: $("#maxprice").val(),
         make: $("#make").val(),
       };
       console.log("search form data:", formData);
@@ -318,8 +325,40 @@ $(() => {
     $planeListings.detach();
     $search.detach();
     $("main").append($sell);
-  });
 
+    const $sellForm = $(".sell-box");
+    $sellForm.on("submit", function (event) {
+      event.preventDefault();
+      const formData = {
+        title: $("#title").val(),
+        price: $("#price").val(),
+        year: $("#sell-year").val(),
+        description: $("#description").val(),
+        condition: $("#sell-condition").val(),
+        make: $("#sell-make").val(),
+        model: $("#model").val(),
+        planes_class: $("#class").val(),
+        airframe_hours: $("#airframeHours").val(),
+        engine_hours: $("#engineHours").val(),
+        // img_path: $("#photoUrl").val(),
+      };
+      console.log("sell form data:", formData);
+      $.ajax({
+        method: "POST",
+        url: "api/planes/listings",
+        data: formData,
+      })
+        .then(function (results) {
+          console.log("sell form results:", results);
+          $("main").append($planeListings);
+          $sell.detach();
+          renderListings(results.planes, "my new listing");
+        })
+        .catch((error) => {
+          console.log(error.message);
+        });
+    });
+  });
   $header.on("click", ".my-listings", function () {});
 
   $header.on("click", ".my-likes", function () {});

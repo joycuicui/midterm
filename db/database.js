@@ -25,7 +25,7 @@ const getPlanes = function (options, limit = 10) {
     queryParams.push(options.condition);
     queryString += `AND condition = $${queryParams.length}`;
   }
-  //// DOES NOT WORK!!!
+
   if (options.minimum_price && options.maximum_price) {
     queryParams.push(options.minimum_price, options.maximum_price);
     queryString += `AND price BETWEEN $${queryParams.length - 1} AND $${
