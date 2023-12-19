@@ -7,45 +7,33 @@ const db = require("../db/connection");
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /// LISTINGS
 ////////////////////////////////////////////////////////////////////////////////////////////////
-const getAllPlanes = function (options, limit = 10) {
+const getPlanes = function (options, limit = 10) {
   const queryParams = [];
 
-  let queryString = `SELECT  * FROM planes`;
+  let queryString = `
+  SELECT  planes.*, users.name
+  FROM plane
+  JOIN users on users.id = owner_id
+  WHERE 1 = 1`;
 
   if (options.year) {
     queryParams.push(`%${options.year}%`);
-    queryString += `WHERE year = $${queryParams.length}`;
+    queryString += `AND year = $${queryParams.length}`;
   }
 
   if (options.condition) {
     queryParams.push(options.condition);
-    if (queryParams.length === 1) {
-      queryString += `WHERE condition = $${queryParams.length}`;
-    } else {
-      queryString += `AND condition = $${queryParams.length}`;
-    }
+    queryString += `AND condition = $${queryParams.length}`;
   }
 
   if (options.minimum_price && options.maximum_price) {
-    queryParams.push(options.minimum_price, options.maximum_price);
-    if (queryParams.length === 2) {
-      queryString += `WHERE price BETWEEN $${queryParams.length - 1} AND $${
-        queryParams.length
-      }`;
-    } else {
-      queryString += `AND price BETWEEN $${queryParams.length - 1} AND $${
-        queryParams.length
-      }`;
-    }
+    queryString += `AND price BETWEEN $${queryParams.length - 1} AND $${
+      queryParams.length
+    }`;
   }
 
   if (options.make) {
-    queryParams.push(options.make);
-    if (queryParams.length === 1) {
-      queryString += `WHERE make = $${queryParams.length}`;
-    } else {
-      queryString += `AND make = $${queryParams.length}`;
-    }
+    queryString += `AND make = $${queryParams.length}`;
   }
 
   queryParams.push(limit);
@@ -63,8 +51,8 @@ const getMyListings = function (user_id, limit = 10) {
   return db
     .query(
       `
-        SELECT 
-        FROM planes.*
+        SELECT planes.*, users.name
+        FROM planes
         JOIN users ON users.id = owner_id
         WHERE users.id = $1
         GROUP BY users.id
@@ -81,4 +69,4 @@ const getMyListings = function (user_id, limit = 10) {
     });
 };
 
-module.exports = { getAllPlanes, getMyListings };
+module.exports = { getPlanes, getMyListings };
