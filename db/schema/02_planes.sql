@@ -11,7 +11,7 @@ CREATE TABLE planes (
   planes_class VARCHAR(255) NOT NULL,
   airframe_hours INTEGER NOT NULL,
   engine_hours INTEGER NOT NULL,
-  plane_photos_id INTEGER,
+  img_path TEXT NOT NULL,
   price INTEGER NOT NULL,
   active BOOLEAN NOT NULL DEFAULT TRUE,
   sold BOOLEAN NOT NULL DEFAULT FALSE,
