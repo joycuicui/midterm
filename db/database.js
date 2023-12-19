@@ -17,6 +17,37 @@ const getUserWithEmail = function (email) {
     });
 };
 
+const getUserWithId = function (id) {
+  return pool
+    .query(`SELECT * FROM users WHERE id = $1;`, [id])
+    .then((result) => {
+      // console.log("result.rows:", result.rows);
+      // console.log("result.rows[0]", result.rows[0]);
+      const user = result.rows[0];
+      return user || null;
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+};
+
+const addUser = function (user) {
+  return pool
+    .query(
+      `INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *;`,
+      [user.name, user.email, user.password]
+    )
+    .then((result) => {
+      // console.log("result.rows:", result.rows);
+      // console.log("result.rows[0]", result.rows[0]);
+      const user = result.rows[0];
+      return user || null;
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+};
+
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /// LISTINGS
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -84,4 +115,10 @@ const getMyListings = function (user_id, limit = 10) {
     });
 };
 
-module.exports = { getPlanes, getMyListings, getUserWithEmail };
+module.exports = {
+  getPlanes,
+  getMyListings,
+  getUserWithEmail,
+  getUserWithId,
+  addUser,
+};
