@@ -4,5 +4,5 @@ id SERIAL PRIMARY KEY NOT NULL,
 planes_id INTEGER,
 img_path1 TEXT NOT NULL,
 img_path2 TEXT NOT NULL,
-image_path3 TEXT NOT NULL
+img_path3 TEXT NOT NULL
 );
