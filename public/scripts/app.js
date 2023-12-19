@@ -137,7 +137,7 @@ const createListing = function (plane) {
   <article class="listing">
   <div class="listing-image">
     <img
-      src="${plane.photo_url}"
+      src="#"
       alt="plane listing image"
     />
   </div>
@@ -254,6 +254,7 @@ $(() => {
     console.log("home got clicked!");
     $search.detach();
     $sell.detach();
+    $("main").append($planeListings);
     loadListings();
   });
 
