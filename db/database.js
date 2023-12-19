@@ -12,8 +12,8 @@ const getPlanes = function (options, limit = 10) {
 
   let queryString = `
   SELECT  planes.*, users.name
-  FROM plane
-  JOIN users on users.id = owner_id
+  FROM planes
+  JOIN users on users.id = user_id
   WHERE 1 = 1`;
 
   if (options.year) {

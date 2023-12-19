@@ -162,23 +162,30 @@ const createListing = function (plane) {
   `;
 };
 
-// listings here is an object
 const renderListings = function (listings) {
   $planeListings.empty();
-  for (const id in listings) {
-    const listing = listings[id];
-    $planeListings.prepend(createListing(listing));
-  }
+  // for (const id in listings) {
+  //   const listing = listings[id];
+  //   $planeListings.prepend(createListing(listing));
+  // }
+  console.log("listings:", listings);
+  listings.forEach((plane) => {
+    const $listing = createListing(plane);
+    $planeListings.append($listing);
+  });
 };
 
 const loadListings = function () {
   console.log("load listings function...");
+  console.log("ajax url:", "/api/planes");
   $.ajax({
     method: "GET",
-    url: "/",
+    url: "/api/planes",
   })
     .then(function (results) {
-      renderListings(results.listings);
+      console.log("results:", results);
+      console.log("results.planes:", results.planes);
+      renderListings(results.planes);
     })
     .catch((err) => {
       console.log(err.message);
