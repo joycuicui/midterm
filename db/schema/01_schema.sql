@@ -9,10 +9,8 @@ CREATE TABLE users (
 DROP TABLE IF EXISTS planes CASCADE;
 CREATE TABLE planes (
   id SERIAL PRIMARY KEY NOT NULL,
-  owner_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
   title VARCHAR(255) NOT NULL,
-  photo_url VARCHAR(255) NOT NULL,
-  price INTEGER NOT NULL,
   description TEXT,
   condition VARCHAR(255) NOT NULL,
   year INTEGER NOT NULL,
@@ -21,10 +19,35 @@ CREATE TABLE planes (
   planes_class VARCHAR(255) NOT NULL,
   airframe_hours INTEGER NOT NULL,
   engine_hours INTEGER NOT NULL,
-  date_posted TIMESTAMP NOT NULL,
+  plane_photos_id INTEGER,
+  price INTEGER NOT NULL,
   active BOOLEAN NOT NULL DEFAULT TRUE,
-  sold BOOLEAN NOT NULL DEFAULT FALSE
+  sold BOOLEAN NOT NULL DEFAULT FALSE,
+  featured BOOLEAN NOT NULL DEFAULT FALSE,
+  date_posted TIMESTAMP NOT NULL
 );
+
+DROP TABLE IF EXISTS plane_photos CASCADE;
+CREATE TABLE plane_photos (
+id SERIAL PRIMARY KEY NOT NULL,
+planes_id INTEGER REFERENCES planes(id) ON DELETE CASCADE,
+img_path1 TEXT NOT NULL,
+img_path2 TEXT NOT NULL,
+image_path3 TEXT NOT NULL
+);
+
+/*ALTER TABLE planes
+ADD CONSTRAINT fk_plane_photos_id
+FOREIGN KEY (plane_photos_id) REFERENCES plane_photos(id) ON DELETE CASCADE;
+
+ALTER TABLE plane_photos
+ADD CONSTRAINT fk_planes_id
+FOREIGN KEY (planes_id) REFERENCES planes(id) ON DELETE CASCADE;
+
+*/
+
+/*
+
 
 DROP TABLE IF EXISTS favorites CASCADE;
 CREATE TABLE favorites (
@@ -41,4 +64,4 @@ CREATE TABLE messages (
   receiver_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
   content TEXT NOT NULL,
   time_sent TIMESTAMP NOT NULL
-);
+);*/
