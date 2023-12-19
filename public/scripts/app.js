@@ -197,7 +197,7 @@ const createListing = function (plane) {
   <article class="listing">
   <div class="listing-image">
     <img
-      src="#"
+      src="${plane.img_path}"
       alt="plane listing image"
     />
   </div>
