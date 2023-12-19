@@ -17,23 +17,25 @@ const getPlanes = function (options, limit = 10) {
   WHERE 1 = 1`;
 
   if (options.year) {
-    queryParams.push(`%${options.year}%`);
+    queryParams.push(options.year);
     queryString += `AND year = $${queryParams.length}`;
   }
-
+  //// DOES NOT WORK FOR used lowercase
   if (options.condition) {
     queryParams.push(options.condition);
     queryString += `AND condition = $${queryParams.length}`;
   }
-
+  //// DOES NOT WORK!!!
   if (options.minimum_price && options.maximum_price) {
+    queryParams.push(options.minimum_price, options.maximum_price);
     queryString += `AND price BETWEEN $${queryParams.length - 1} AND $${
       queryParams.length
     }`;
   }
 
   if (options.make) {
-    queryString += `AND make = $${queryParams.length}`;
+    queryParams.push(`%${options.make}`);
+    queryString += `AND make LIKE $${queryParams.length}`;
   }
 
   queryParams.push(limit);

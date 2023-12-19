@@ -2,13 +2,15 @@
 //   background-image: none;
 //   height: 10vh;
 // }
-.search-box {
+.search-box,
+.sell-box {
   width: 70vw;
   margin: 3rem auto;
   padding: 5rem;
   border-radius: 15px;
 }
-.search-box h2 {
+.search-box h2,
+.sell-box h2 {
   text-align: center;
   margin-bottom: 3rem;
 }

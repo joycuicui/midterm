@@ -46,7 +46,7 @@ const updateHeader = function (user) {
 };
 
 const $sell = $(`
-<section class="search-box">
+<section class="sell-box">
   <h2>SELL YOUR PLANE</h2>
   <form id="planeForm" class="planeForm" action="/" method="post">
     <div class="form-left">
@@ -127,14 +127,12 @@ const $search = $(`
             id="year"
             name="year"
             placeholder="Year"
-            required
           />
           <input
             type="text"
             id="condition"
             name="condition"
             placeholder="Condition"
-            required
           />
 
           <div class="input-inline">
@@ -143,7 +141,6 @@ const $search = $(`
               id="minprice"
               name="minprice"
               placeholder="Minimum Price"
-              required
             />
 
             <input
@@ -151,7 +148,6 @@ const $search = $(`
               id="maxprice"
               name="maxprice"
               placeholder="Maximum Price"
-              required
             />
           </div>
           <input
@@ -159,7 +155,6 @@ const $search = $(`
             id="make"
             name="make"
             placeholder="Make"
-            required
           />
 
           <button type="submit">SEARCH</button>
@@ -178,13 +173,24 @@ const $planeListings = $(".all-listings");
 //       </div>
 //     </section>
 //     `);
-const $divider = $(`
+
+const divider = function (string) {
+  return `
   <div class="divider">
     <div class="divider-line"></div>
-    <h2 class="divider-text">Featured Listings</h2>
+    <h2 class="divider-text">${string}</h2>
     <div class="divider-line"></div>
   </div>
-`);
+  
+  `;
+};
+// const $divider = $(`
+//   <div class="divider">
+//     <div class="divider-line"></div>
+//     <h2 class="divider-text">Featured Listings</h2>
+//     <div class="divider-line"></div>
+//   </div>
+// `);
 
 const createListing = function (plane) {
   return `
@@ -217,13 +223,13 @@ const createListing = function (plane) {
   `;
 };
 
-const renderListings = function (listings) {
+const renderListings = function (listings, sectionName) {
   $planeListings.empty();
   // for (const id in listings) {
   //   const listing = listings[id];
   //   $planeListings.prepend(createListing(listing));
   // }
-  $planeListings.append($divider);
+  $planeListings.append(divider(sectionName));
   console.log("listings:", listings);
 
   listings.forEach((plane) => {
@@ -242,7 +248,7 @@ const loadListings = function () {
     .then(function (results) {
       console.log("results:", results);
       console.log("results.planes:", results.planes);
-      renderListings(results.planes);
+      renderListings(results.planes, "featured listings");
     })
     .catch((err) => {
       console.log(err.message);
@@ -278,6 +284,33 @@ $(() => {
     $planeListings.detach();
     $sell.detach();
     $("main").append($search);
+
+    const $searchForm = $(".search-box");
+    $searchForm.on("submit", function (event) {
+      event.preventDefault();
+      const formData = {
+        year: $("#year").val(),
+        condition: $("#condition").val(),
+        minprice: $("#minprice").val(),
+        maxprice: $("#maxprice").val(),
+        make: $("#make").val(),
+      };
+      console.log("search form data:", formData);
+      $.ajax({
+        method: "GET",
+        url: "api/planes/listings/search",
+        data: formData,
+      })
+        .then(function (results) {
+          console.log("search results:", results);
+          $("main").append($planeListings);
+          $search.detach();
+          renderListings(results.planes, "search results");
+        })
+        .catch((error) => {
+          console.log(error.message);
+        });
+    });
   });
 
   $header.on("click", ".sell", function () {
