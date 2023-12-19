@@ -1,4 +1,50 @@
 // Client facing scripts here
+const $header = $(".header");
+
+let currentUser = null;
+
+const updateHeader = function (user) {
+  console.log("updating header with user:", user);
+  currentUser = user;
+  $header.find(".nav-bar").remove();
+  let navBar;
+  if (!user) {
+    navBar = `
+    <div class="nav-box">
+      <div class="logo">
+        <i class="fa-solid fa-plane-up"></i>
+      </div>
+    <nav class="nav-bar">
+        <ul class="nav-bar-items">
+          <li class="home">Home</li>
+          <li class="search">Search</li>
+          <li class="login">Log In</li>
+          <li class="signup">Sign Up</li>
+        </ul>
+      </nav>
+    `;
+  } else {
+    navBar = `
+    <div class="nav-box">
+      <div class="logo">
+        <i class="fa-solid fa-plane-up"></i>
+      </div>
+    <nav class="nav-bar">
+        <ul class="nav-bar-items">
+          <li class="home">Home</li>
+          <li class="search">Search</li>
+          <li class="sell">Sell</li>
+          <li class="my-listings">Listings</li>
+          <li class="my-likes">Favorites</li>
+          <li class="messages">Messages</li>
+          <li class="logout">Log out</li>
+        </ul>
+      </nav>
+    `;
+  }
+  $header.append(navBar);
+};
+
 const $sell = $(`
 <section class="search-box">
   <h2>SELL YOUR PLANE</h2>
@@ -122,15 +168,23 @@ const $search = $(`
     </section>
   `);
 
-const $planeListings = $(`
-    <section class="all-listings">
-      <div class="divider">
-        <div class="divider-line"></div>
-        <h2 class="divider-text">Featured Listings</h2>
-        <div class="divider-line"></div>
-      </div>
-    </section> 
-    `);
+const $planeListings = $(".all-listings");
+// const $planeListings = $(`
+//     <section class="all-listings">
+//       <div class="divider">
+//         <div class="divider-line"></div>
+//         <h2 class="divider-text">Featured Listings</h2>
+//         <div class="divider-line"></div>
+//       </div>
+//     </section>
+//     `);
+const $divider = $(`
+  <div class="divider">
+    <div class="divider-line"></div>
+    <h2 class="divider-text">Featured Listings</h2>
+    <div class="divider-line"></div>
+  </div>
+`);
 
 const createListing = function (plane) {
   return `
@@ -169,7 +223,9 @@ const renderListings = function (listings) {
   //   const listing = listings[id];
   //   $planeListings.prepend(createListing(listing));
   // }
+  $planeListings.append($divider);
   console.log("listings:", listings);
+
   listings.forEach((plane) => {
     const $listing = createListing(plane);
     $planeListings.append($listing);
@@ -194,57 +250,15 @@ const loadListings = function () {
 };
 
 $(() => {
-  const $header = $(".header");
-
-  let currentUser = null;
-
-  function updateHeader(user) {
-    console.log("updating header with user:", user);
-    currentUser = user;
-    $header.find(".nav-bar").remove();
-    let navBar;
-    if (!user) {
-      navBar = `
-      <div class="nav-box">
-        <div class="logo">
-          <i class="fa-solid fa-plane-up"></i>
-        </div>
-      <nav class="nav-bar">
-          <ul class="nav-bar-items">
-            <li class="home">Home</li>
-            <li class="search">Search</li>
-            <li class="login">Log In</li>
-            <li class="signup">Sign Up</li>
-          </ul>
-        </nav>
-      `;
-    } else {
-      navBar = `
-      <div class="nav-box">
-        <div class="logo">
-          <i class="fa-solid fa-plane-up"></i>
-        </div>
-      <nav class="nav-bar">
-          <ul class="nav-bar-items">
-            <li class="home">Home</li>
-            <li class="search">Search</li>
-            <li class="sell">Sell</li>
-            <li class="my-listings">Listings</li>
-            <li class="my-likes">Favorites</li>
-            <li class="messages">Messages</li>
-            <li class="logout">Log out</li>
-          </ul>
-        </nav>
-      `;
-    }
-    $header.append(navBar);
-  }
-
   // testing: when there is a user logged in
   const testUser = { name: "abc" };
   // testing: when there is no user logged in
   // const testUser = null;
   updateHeader(testUser);
+  $search.detach();
+  $sell.detach();
+  $("main").append($planeListings);
+  loadListings();
 
   ////////////////////////////////////////////////////////////////////////
   /// event listeners for header elements: home, search, myListing...
@@ -252,6 +266,7 @@ $(() => {
 
   $header.on("click", ".home", function () {
     console.log("home got clicked!");
+    $planeListings.detach();
     $search.detach();
     $sell.detach();
     $("main").append($planeListings);
@@ -260,12 +275,14 @@ $(() => {
 
   $header.on("click", ".search", function () {
     console.log("search got clicked!");
+    $planeListings.detach();
     $sell.detach();
     $("main").append($search);
   });
 
   $header.on("click", ".sell", function () {
     console.log("sell got clicked!");
+    $planeListings.detach();
     $search.detach();
     $("main").append($sell);
   });
