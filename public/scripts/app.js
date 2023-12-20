@@ -169,6 +169,75 @@ const $search = $(`
       </form>
     </section>
   `);
+/*-- HTML template for viewing specific plane listing triggered from View button--*/
+const $viewSpecificListing = $(`
+<section class="view-specific-listing">
+    <h2 id="planes-title"></h2>
+    <div class="plane-image">
+    <img
+      src=""
+      id = "planes-image-path"
+      alt="plane listing image"
+    />
+    </div>
+    <div class="planeDesc">
+        <span class="label">DESCRIPTION :</span>
+        <span class="value" id = "planes-description"></span>
+    </div>
+    <div class="planeCondition">
+    <span class="label">CONDIITON :</span>
+    <span class="value" id = "planes-condition"></span>
+    </div>
+    <div class="planeYear">
+    <span class="label">YEAR :</span>
+    <span class="value" id = "planes-year"></span>
+    </div>
+    <div class="planeMake">
+    <span class="label">MAKE :</span>
+    <span class="value" id = "planes-make"></span>
+    </div>
+    <div class="planeModel">
+    <span class="label">MODEL:</span>
+    <span class="value" id = "planes-model"></span>
+    </div>
+    <div class="planeClass">
+    <span class="label">CLASS :</span>
+    <span class="value" id = "planes-class"></span>
+    </div>
+    <div class="planeAirFrameHrs">
+    <span class="label">AIR FRAME HOURS :</span>
+    <span class="value" id = "planes-airframe-hours"></span>
+    </div>
+    <div class="planeEngineHrs">
+    <span class="label">ENGINE HOURS :</span>
+    <span class="value" id = "planes-engine-hours"></span>
+    </div>
+    <div class="planesPrice">
+    <span class="label">PRICE :</span>
+    <span class="value" id = "planes-price"></span>
+    </div>
+    <div class="planeSeller">
+    <span class="label">SELLER :</span>
+    <span class="value" id = "planes-user-id"></span>
+    </div>
+    <div class="planePosted">
+    <span class="label">DATE POSTED :</span>
+    <span class="value" id = "planes-date-posted"></span>
+    </div>
+    <div class="view-action-buttons">
+    <footer class="view-action-button">
+    <form action="" method="">
+    <button class="footer-button buy-button" id="buy-button">BUY</button>
+    </form>
+    <form action="" method="">
+    <button class="footer-button like-button" id="like-button"><i class="fa-solid fa-heart"></i></button>
+
+    </form>
+    </footer>
+    </div>
+</section>
+`);
+
 
 const $planeListings = $(".all-listings");
 // const $planeListings = $(`
@@ -188,7 +257,7 @@ const divider = function (string) {
     <h2 class="divider-text">${string}</h2>
     <div class="divider-line"></div>
   </div>
-  
+
   `;
 };
 // const $divider = $(`
@@ -220,7 +289,7 @@ const createListing = function (plane) {
       <li>ENGINE: ${plane.engine_hours} hours</li>
     </ul>
     <footer class="listing-footer">
-      <button class="footer-button details-button">View details</button>
+      <button class="footer-button details-button" data-plane-id="${plane.id}">View details</button>
       <button class="footer-button like-button">
         <i class="fa-solid fa-heart"></i>
       </button>
@@ -256,6 +325,66 @@ const loadListings = function () {
       console.log("results:", results);
       console.log("results.planes:", results.planes);
       renderListings(results.planes, "featured listings");
+
+      //////////////////////////////////////////////////////////////////////////
+      /// Event listener for plane listing buttons
+      //////////////////////////////////////////////////////////////////////////
+      results.planes.forEach((plane) => {
+        $(`.details-button[data-plane-id="${plane.id}"]`).on("click", function () {
+          console.log("Clicked element:", this);
+
+          const clickedPlaneId = $(this).data("plane-id");
+          console.log("plane id ---> ", clickedPlaneId);
+
+          /*-- Detach HTML templates from DOM---*/
+          $planeListings.detach();
+          $search.detach();
+          $sell.detach();
+          $viewSpecificListing.detach();
+
+          /*-- Ajax call for full details of selected plane---*/
+          $.ajax({
+            method: "GET",
+            url: "/api/planes/listings/" + clickedPlaneId,
+            data: clickedPlaneId,
+          })
+          .then(function (results) {
+            console.log("planes:", results);
+            console.log("results.planes:", results.planes);
+
+                  /*-- Empty $viewSpecificListing ---*/
+      // $viewSpecificListing.empty();
+
+            /*-- Empty $viewSpecificListing and then append new divider name---*/
+           // $viewSpecificListing.empty();
+           $viewSpecificListing.append(divider("PLANE LISTING FULL DETAILS"));
+
+            /*-- Append HTML template for specific plane details---*/
+            $("main").append($viewSpecificListing);
+
+            /*-- Update HTML elements of the HTML Template of $viewSpecificListing ---*/
+            $("#planes-title").text(results.planes[0].title);
+            $("#planes-description").text(results.planes[0].description);
+            $("#planes-condition").text(results.condition);
+            $("#planes-year").text(results.planes[0].year);
+            $("#planes-make").text(results.planes[0].make);
+            $("#planes-model").text(results.planes[0].model);
+            $("#planes-class").text(results.planes[0].planes_class);
+            $("#planes-airframe-hour").text(results.planes[0].airframe_hours);
+            $("#planes-engine-hours").text(results.planes[0].engine_hours);
+            $("#planes-price").text(results.planes[0].price);
+            $("#planes-user-id").text(results.planes[0].user_id);
+            $("#planes-date-posted").text(results.planes[0].date_posted);
+
+            /*-- Change img html tag source of $viewSpecificListing to display the image properly ---*/
+            $("#planes-image-path").attr("src", results.planes[0].img_path);
+
+                  /*-- Append divider after $viewSpecificListing ---*/
+      //$viewSpecificListing.append(divider("PLANE LISTING FULL DETAILS"));
+          })
+          .catch((error) => { console.log(error.message); });
+        });
+      })
     })
     .catch((err) => {
       console.log(err.message);
@@ -279,7 +408,7 @@ const $logout = $(`
 `);
 
 const $login = $(`
-<section class="login-section"> 
+<section class="login-section">
 <div class="login-box">
   <div class="login-form-with-title">
       <h2>READY FOR TAKEOFF? LOG IN NOW!</h2>
@@ -359,6 +488,7 @@ $(() => {
     $planeListings.detach();
     $search.detach();
     $sell.detach();
+    $viewSpecificListing.detach();
     $("main").append($planeListings);
     document.documentElement.scrollTo({
       top: 0,
@@ -374,6 +504,7 @@ $(() => {
     $logout.detach();
     $login.detach();
     $signup.detach();
+    $viewSpecificListing.detach();
     $("main").append($search);
     $search[0].scrollIntoView({ behavior: "smooth" });
 
@@ -412,6 +543,7 @@ $(() => {
     $logout.detach();
     $login.detach();
     $signup.detach();
+    $viewSpecificListing.detach();
     $("main").append($sell);
     $sell[0].scrollIntoView({ behavior: "smooth" });
 
@@ -449,6 +581,7 @@ $(() => {
     });
   });
   $header.on("click", ".my-listings", function () {
+    $viewSpecificListing.detach();
     $planeListings.empty();
     console.log("current user id:", currentUser.id);
     $.ajax({
@@ -471,6 +604,7 @@ $(() => {
     $search.detach();
     $sell.detach();
     $logout.detach();
+    $viewSpecificListing.detach();
     $("main").append($login);
     $login[0].scrollIntoView({ behavior: "smooth" });
     const $loginFrom = $(".login-form");
@@ -517,6 +651,7 @@ $(() => {
     $sell.detach();
     $logout.detach();
     $login.detach();
+    $viewSpecificListing.detach();
     $("main").append($signup);
     $signup[0].scrollIntoView({ behavior: "smooth" });
     const $signupFrom = $(".signup-form");
@@ -558,6 +693,7 @@ $(() => {
     $sell.detach();
     $login.detach();
     $signup.detach();
+    $viewSpecificListing.detach();
     $("main").append($logout);
     $logout[0].scrollIntoView({ behavior: "smooth" });
     const $logoutButton = $(".logout-button");
