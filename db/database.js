@@ -115,10 +115,46 @@ const getMyListings = function (user_id, limit = 10) {
     });
 };
 
+/*--- Function to get featured listings to be rendered on the home page---*/
+const getFeaturedList = function () {
+  return db
+  .query (
+    `SELECT planes.*, users.name
+    FROM planes
+    JOIN users on users.id = user_id
+    WHERE planes.featured = TRUE;`
+  )
+  .then((result) => {
+    return result.rows;
+  })
+  .catch((err) => {
+    console.log(err.message);
+  });
+};
+
+/*--- Function to get all the data of selected plane to be used in the veiw details ---*/
+const getSpecificPlaneInfo = function (id) {
+  return db
+  .query (
+    `SELECT planes.*, users.name
+    FROM planes
+    JOIN users on users.id = user_id
+    WHERE planes.id = $1;`, [id])
+  .then((result) => {
+    console.log("result.rows:", result.rows);
+    return result.rows;
+  })
+  .catch((err) => {
+    console.log(err.message);
+  });
+};
+
 module.exports = {
   getPlanes,
   getMyListings,
   getUserWithEmail,
   getUserWithId,
   addUser,
+  getFeaturedList,
+  getSpecificPlaneInfo
 };
