@@ -8,47 +8,14 @@ const database = require("../db/database");
 //////////////////////////////////////////////////////////////////////////////////////
 /// GET / => home page, shows all plane listings, limiting to 10
 //////////////////////////////////////////////////////////////////////////////////////
-//router.get("/", (req, res) => {
-//  database
-//    .getPlanes(req.query, 10)
-//    .then((planes) => res.send({ planes }))
-//    .catch((err) => {
-//      console.error(err);
-//      res.send(err);
-//    });
-//});
-
-//////////////////////////////////////////////////////////////////////////////////////
-/// GET / => home page, shows all listings that are tagged feature = True in the db
-//////////////////////////////////////////////////////////////////////////////////////
 router.get("/", (req, res) => {
-
   database
-    .getFeaturedList()
+    .getPlanes(req.query, 10)
     .then((planes) => res.send({ planes }))
     .catch((err) => {
       console.error(err);
       res.send(err);
     });
-});
-
-//////////////////////////////////////////////////////////////////////////////////////
-/// GET /listings/:id => Shows all the details of the plane that was selected. Triggered from the View Button.
-//////////////////////////////////////////////////////////////////////////////////////
-
-router.get("/listings/:id", (req, res) => {
-  console.log("please work");
-  const clickedPlaneId = req.params.id;
-  console.log("Clicked plane ID:", clickedPlaneId);
-  console.log("please work");
-
-  database
-  .getSpecificPlaneInfo(clickedPlaneId)
-  .then((planes) => res.send({ planes }))
-  .catch((err) => {
-    console.error(err);
-    res.send(err);
-  });
 });
 
 //////////////////////////////////////////////////////////////////////////////////////
@@ -74,7 +41,7 @@ router.get("/listings/user", (req, res) => {
 /// GET /listings/user/:userId/likes => get a user's liked/favorites listings
 //////////////////////////////////////////////////////////////////////////////////////
 // need a getMyLikes function from database
-router.get("/listings/user/:userId/likes", (req, res) => {
+router.get("/listings/user/likes", (req, res) => {
   const userId = req.session.userId;
   if (!userId) {
     return res.send("error for !userID in get/listings/user/:userId/likes");
