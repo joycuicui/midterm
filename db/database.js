@@ -99,9 +99,9 @@ const getMyListings = function (user_id, limit = 10) {
       `
         SELECT planes.*, users.name
         FROM planes
-        JOIN users ON users.id = owner_id
+        JOIN users ON users.id = user_id
         WHERE users.id = $1
-        GROUP BY users.id
+        GROUP BY users.id, planes.id
         ORDER BY price
         LIMIT $2;`,
       [user_id, limit]

@@ -21,14 +21,16 @@ router.get("/", (req, res) => {
 //////////////////////////////////////////////////////////////////////////////////////
 /// GET /listings/user/:userId => get a user's listings
 //////////////////////////////////////////////////////////////////////////////////////
-router.get("/listings/user/:userId", (req, res) => {
+// router.get("/listings/user/:userId", (req, res) => {
+router.get("/listings/user", (req, res) => {
   const userId = req.session.userId;
+  console.log("userId in get/listings/user: ", userId);
   if (!userId) {
     return res.send("error for !userID in get/listings/user/:userId");
   }
   database
     .getMyListings(userId)
-    .then((listings) => res.send({ listings }))
+    .then((listings) => res.json({ listings }))
     .catch((err) => {
       console.error(err);
       res.send(err);

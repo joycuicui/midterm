@@ -448,7 +448,20 @@ $(() => {
         });
     });
   });
-  $header.on("click", ".my-listings", function () {});
+  $header.on("click", ".my-listings", function () {
+    $planeListings.empty();
+    console.log("current user id:", currentUser.id);
+    $.ajax({
+      method: "GET",
+      url: `api/planes/listings/user`,
+    }).then((results) => {
+      console.log("results in my listings:", results.listings);
+      $("main").append($planeListings);
+      $planeListings[0].scrollIntoView({ behavior: "smooth" });
+
+      renderListings(results.listings, "my listings");
+    });
+  });
 
   $header.on("click", ".my-likes", function () {});
   $header.on("click", ".messages", function () {});
