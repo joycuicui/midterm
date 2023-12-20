@@ -4,7 +4,7 @@ const db = require("../db/connection");
 /// USERS
 ////////////////////////////////////////////////////////////////////////////////////////////////
 const getUserWithEmail = function (email) {
-  return pool
+  return db
     .query(`SELECT * FROM users WHERE email = $1;`, [email])
     .then((result) => {
       // console.log("result.rows:", result.rows);
@@ -18,7 +18,7 @@ const getUserWithEmail = function (email) {
 };
 
 const getUserWithId = function (id) {
-  return pool
+  return db
     .query(`SELECT * FROM users WHERE id = $1;`, [id])
     .then((result) => {
       // console.log("result.rows:", result.rows);
@@ -32,7 +32,7 @@ const getUserWithId = function (id) {
 };
 
 const addUser = function (user) {
-  return pool
+  return db
     .query(
       `INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *;`,
       [user.name, user.email, user.password]
