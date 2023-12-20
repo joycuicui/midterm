@@ -4,9 +4,8 @@ const db = require("../db/connection");
 /// USERS
 ////////////////////////////////////////////////////////////////////////////////////////////////
 const getUserWithEmail = function (email) {
-  knownemail = "ava@email.com";
   return db
-    .query(`SELECT * FROM users WHERE email ILIKE $1;`, [knownemail])
+    .query(`SELECT * FROM users WHERE email ILIKE $1;`, [email])
     .then((result) => {
       console.log("result.rows:", result.rows);
       console.log("result.rows[0]", result.rows[0]);
