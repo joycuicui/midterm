@@ -40,6 +40,7 @@ router.get("/me", (req, res) => {
 ///////////////////////////////////////////////////////////////////////////////
 router.post("/", (req, res) => {
   const user = req.body;
+  console.log("user: ", user);
   database
     .addUser(user)
     .then((user) => {

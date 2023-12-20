@@ -303,6 +303,33 @@ const $login = $(`
 
 `);
 
+const $signup = $(`
+    <section class="signup-section">
+        <div class="signup-box">
+          <div class="signup-form-with-title">
+            <h2>ELEVATE YOUR DREAMS, SIGN UP TODAY!</h2>
+            <form action="#" class="signup-form">
+              <div class="form__group">
+                <input type="text" name="signup-name" class="form__input" placeholder="Full Name" id="signup-name" required>
+                <label for="signup-name" class="form__label">Full name</label>
+              </div>
+              <div class="form__group">
+                 <input type="email" name="signup-email" class="form__input" placeholder="Email Address" id="signup-email" required>
+                 <label for="signup-email" class="form__label">Email address</label>
+              </div>
+              <div class="form__group">
+                <input type="password" name="signup-password" class="form__input" placeholder="Password" id="signup-password" required>
+                <label for="signup-password" class="form__label">Password</label>
+              </div>
+              <div class="form__group">
+                <button class="signup-button">Sign up</button>
+              </div>
+            </form>
+          </div>
+        </div>
+    </section>
+`);
+
 $(() => {
   $.ajax({
     url: "api/users/me",
@@ -328,6 +355,7 @@ $(() => {
     console.log("home got clicked!");
     $logout.detach();
     $login.detach();
+    $signup.detach();
     $planeListings.detach();
     $search.detach();
     $sell.detach();
@@ -345,6 +373,7 @@ $(() => {
     $sell.detach();
     $logout.detach();
     $login.detach();
+    $signup.detach();
     $("main").append($search);
     $search[0].scrollIntoView({ behavior: "smooth" });
 
@@ -382,6 +411,7 @@ $(() => {
     $search.detach();
     $logout.detach();
     $login.detach();
+    $signup.detach();
     $("main").append($sell);
     $sell[0].scrollIntoView({ behavior: "smooth" });
 
@@ -451,20 +481,70 @@ $(() => {
           }
           console.log("results.user:", results.user);
           updateHeader(results.user);
-          // window.location.href = "/";
         })
+        // .then(() => {
+        //   window.location.href = "/";
+        // })
         .catch((error) => {
           console.log("error during ajax:", error);
         });
+      $login.detach();
+      $("main").append($planeListings);
+      document.documentElement.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+      loadListings();
     });
   });
-  $header.on("click", ".signup", function () {});
+  $header.on("click", ".signup", function () {
+    console.log("signup got clicked!");
+    $planeListings.detach();
+    $search.detach();
+    $sell.detach();
+    $logout.detach();
+    $login.detach();
+    $("main").append($signup);
+    $signup[0].scrollIntoView({ behavior: "smooth" });
+    const $signupFrom = $(".signup-form");
+    $signupFrom.on("submit", function (event) {
+      event.preventDefault();
+      console.log("signup form submitted!");
+      const data = $(this).serialize();
+      console.log("serialized data:", data);
+      // const email = $(this).find('input[name="login-email"]').val();
+      // console.log("email entered for login is:", email);
+      console.log("before ajax request");
+      $.ajax({
+        method: "POST",
+        url: "/api/users/",
+        data,
+      }).then(() => {
+        $.ajax({
+          url: "api/users/me",
+        }).then((results) => {
+          console.log("server response:", results);
+          // console.log("results.user:", results.user);
+          updateHeader(results);
+        });
+      });
+      $signup.detach();
+      $("main").append($planeListings);
+      document.documentElement.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+      loadListings();
+    });
+  });
 
   $header.on("click", ".logout", function () {
     console.log("logout got clicked!");
     $planeListings.detach();
     $search.detach();
     $sell.detach();
+    $login.detach();
+    $signup.detach();
     $("main").append($logout);
     $logout[0].scrollIntoView({ behavior: "smooth" });
     const $logoutButton = $(".logout-button");
