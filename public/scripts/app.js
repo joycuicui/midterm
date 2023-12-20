@@ -262,18 +262,59 @@ const loadListings = function () {
     });
 };
 
+const $logout = $(`
+<section class="logout-section">
+<div class="logout-box">
+  <div class="logout-with-title">
+    <h2>UNTIL NEXT TIME . . .</h2>
+      <div class="logout-buttons">
+        <button class="logout-button">Log out</button>
+      </div>
+      <div class="form__group">
+        <button class="logout-cancel"><a href="#">Cancel</a></button>
+      </div>
+  </div>
+</div>
+</section>
+`);
+
+const $login = $(`
+<section class="login-section"> 
+<div class="login-box">
+  <div class="login-form-with-title">
+      <h2>READY FOR TAKEOFF? LOG IN NOW!</h2>
+      <form action="#" class="login-form">
+        <div class="form__group">
+            <input type="email" name="login-email" class="form__input" placeholder="Email address" id="login-email" required>
+            <label for="login-email" class="form__label">Email address</label>
+        </div>
+        <div class="form__group">
+          <input type="password" name="login-password" class="form__input" placeholder="Password" id="login-password" required>
+          <label for="login-password" class="form__label">Password</label>
+        </div>
+        <div class="form__group">
+          <button class="login-button">Log In</button>
+         </div>
+      </form>
+  </div>
+</div>
+</section>
+
+
+`);
+
 $(() => {
-  // $.ajax({
-  //   url: "api/users/me",
-  // }).then(function (json) {
-  //   updateHeader(json.user);
-  // });
+  $.ajax({
+    url: "api/users/me",
+  }).then(function (json) {
+    updateHeader(json.user);
+  });
 
   // testing: when there is a user logged in
-  const testUser = { name: "abc" };
+  // const testUser = { name: "abc" };
   // testing: when there is no user logged in
   // const testUser = null;
-  updateHeader(testUser);
+  // updateHeader(testUser);
   $search.detach();
   $sell.detach();
   $("main").append($planeListings);
@@ -285,10 +326,16 @@ $(() => {
 
   $header.on("click", ".home", function () {
     console.log("home got clicked!");
+    $logout.detach();
+    $login.detach();
     $planeListings.detach();
     $search.detach();
     $sell.detach();
     $("main").append($planeListings);
+    document.documentElement.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
     loadListings();
   });
 
@@ -296,7 +343,10 @@ $(() => {
     console.log("search got clicked!");
     $planeListings.detach();
     $sell.detach();
+    $logout.detach();
+    $login.detach();
     $("main").append($search);
+    $search[0].scrollIntoView({ behavior: "smooth" });
 
     const $searchForm = $(".search-box");
     $searchForm.on("submit", function (event) {
@@ -330,7 +380,10 @@ $(() => {
     console.log("sell got clicked!");
     $planeListings.detach();
     $search.detach();
+    $logout.detach();
+    $login.detach();
     $("main").append($sell);
+    $sell[0].scrollIntoView({ behavior: "smooth" });
 
     const $sellForm = $(".sell-box");
     $sellForm.on("submit", function (event) {
@@ -369,7 +422,69 @@ $(() => {
 
   $header.on("click", ".my-likes", function () {});
   $header.on("click", ".messages", function () {});
-  $header.on("click", ".login", function () {});
+  $header.on("click", ".login", function () {
+    console.log("login got clicked!");
+    $planeListings.detach();
+    $search.detach();
+    $sell.detach();
+    $logout.detach();
+    $("main").append($login);
+    $login[0].scrollIntoView({ behavior: "smooth" });
+    const $loginFrom = $(".login-form");
+    $loginFrom.on("submit", function (event) {
+      event.preventDefault();
+      console.log("login form submitted!");
+      const data = $(this).serialize();
+      const email = $(this).find('input[name="login-email"]').val();
+      console.log("email entered for login is:", email);
+      console.log("serialized data:", data);
+      console.log("before ajax request");
+      $.ajax({
+        method: "POST",
+        url: "/api/users/login",
+        data,
+      })
+        .then((results) => {
+          console.log("server response:", results);
+          if (!results.user) {
+            return console.log("unable to log in");
+          }
+          console.log("results.user:", results.user);
+          updateHeader(results.user);
+          // window.location.href = "/";
+        })
+        .catch((error) => {
+          console.log("error during ajax:", error);
+        });
+    });
+  });
   $header.on("click", ".signup", function () {});
-  $header.on("click", ".logout", function () {});
+
+  $header.on("click", ".logout", function () {
+    console.log("logout got clicked!");
+    $planeListings.detach();
+    $search.detach();
+    $sell.detach();
+    $("main").append($logout);
+    $logout[0].scrollIntoView({ behavior: "smooth" });
+    const $logoutButton = $(".logout-button");
+    $logoutButton.on("click", function () {
+      console.log("logout button clicked!");
+      $.ajax({
+        method: "POST",
+        url: "/api/users/logout",
+      })
+        .then(() => {
+          return updateHeader(null);
+        })
+        .then(() => {
+          window.location.href = "/";
+        });
+    });
+    const $logoutCancel = $(".logout-cancel");
+    $logoutCancel.on("click", function () {
+      console.log("cancel in logout box got clicked!");
+      window.location.href = "/";
+    });
+  });
 });

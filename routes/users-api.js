@@ -56,11 +56,14 @@ router.post("/", (req, res) => {
 /// Log a user in
 ///////////////////////////////////////////////////////////////////////////////
 router.post("/login", (req, res) => {
-  const email = req.body.email;
-  const password = req.body.password;
+  console.log("req.body:", req.body);
+  const email = req.body["login-email"];
+  console.log("email entered for log in in post request is:", email);
+  const password = req.body["login-password"];
   database.getUserWithEmail(email).then((user) => {
+    console.log("user retrieved from getUserWithEmail is:", user);
     if (!user) {
-      return res.send({ error: "no user with this id" });
+      return res.send({ error: "no user with this email" });
     }
     if (password !== user.password) {
       return res.send({ error: "wrong password" });
