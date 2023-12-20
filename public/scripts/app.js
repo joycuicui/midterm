@@ -264,10 +264,10 @@ const loadListings = function () {
 
 $(() => {
   // $.ajax({
-  //     url: "/users/me",
-  //   }).then(function(json) {
-  //     updateHeader(json.user);
-  //   });
+  //   url: "api/users/me",
+  // }).then(function (json) {
+  //   updateHeader(json.user);
+  // });
 
   // testing: when there is a user logged in
   const testUser = { name: "abc" };
