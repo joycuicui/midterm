@@ -188,7 +188,7 @@ const divider = function (string) {
     <h2 class="divider-text">${string}</h2>
     <div class="divider-line"></div>
   </div>
-  
+
   `;
 };
 // const $divider = $(`
@@ -220,7 +220,7 @@ const createListing = function (plane) {
       <li>ENGINE: ${plane.engine_hours} hours</li>
     </ul>
     <footer class="listing-footer">
-      <button class="footer-button details-button">View details</button>
+      <button class="footer-button details-button" data-plane-id="${plane.id}">View details</button>
       <button class="footer-button like-button">
         <i class="fa-solid fa-heart"></i>
       </button>
@@ -256,11 +256,33 @@ const loadListings = function () {
       console.log("results:", results);
       console.log("results.planes:", results.planes);
       renderListings(results.planes, "featured listings");
-    })
+
+      /////////////////////////
+      /// Event listener for plane listing buttons
+      //////////////////////////
+      results.planes.forEach((plane) => {
+        $(`.details-button[data-plane-id="${plane.id}"]`).on("click", function () {
+          console.log("View Detail button clicked!");
+          console.log("Clicked element:", this);
+
+          const clickedPlaneId = $(this).data("plane-id");
+          console.log("plane id ---> ", clickedPlaneId);
+
+          /*-- Detach HTML templates and empty out  $viewSpecificListing from DOM---*/
+          //$planeListings.detach();
+          //$search.detach();
+          //$sell.detach();
+          //$viewSpecificListing.empty();
+
+          
+        }) /*-- closing for .on --*/
+      }); /*-- closing for the for each loop --*/
+
+    }) /*-- closing for the .then --*/
     .catch((err) => {
       console.log(err.message);
     });
-};
+}; /*-- closing for loadListingsfunction --*/
 
 const $logout = $(`
 <section class="logout-section">
@@ -279,7 +301,7 @@ const $logout = $(`
 `);
 
 const $login = $(`
-<section class="login-section"> 
+<section class="login-section">
 <div class="login-box">
   <div class="login-form-with-title">
       <h2>READY FOR TAKEOFF? LOG IN NOW!</h2>
