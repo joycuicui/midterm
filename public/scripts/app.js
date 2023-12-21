@@ -553,9 +553,8 @@ $(() => {
     }).then((results) => {
       console.log("results in my listings:", results.listings);
       $("main").append($planeListings);
-      $planeListings[0].scrollIntoView({ behavior: "smooth" });
-
       renderListings(results.listings, "my listings");
+      $planeListings[0].scrollIntoView({ behavior: "smooth" });
     });
   });
 
@@ -575,9 +574,9 @@ $(() => {
     }).then((results) => {
       console.log("results in my liked listings:", results.likedListings);
       $("main").append($planeListings);
-      $planeListings[0].scrollIntoView({ behavior: "smooth" });
 
       renderListings(results.likedListings, "my favorite planes");
+      $planeListings[0].scrollIntoView({ behavior: "smooth" });
     });
   });
 
