@@ -92,7 +92,7 @@ router.get("/listings/:id", (req, res) => {
   console.log("please work");
 
   database
-    .getSpecficPlaneInfo(clickedPlaneId)
+    .getSpecificPlaneInfo(clickedPlaneId)
     .then((planes) => res.send({ planes }))
     .catch((err) => {
       console.error(err);
