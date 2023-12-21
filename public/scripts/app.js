@@ -443,6 +443,7 @@ $(() => {
     $search.detach();
     $sell.detach();
     $messages.empty();
+    $newmessage.empty();
     $viewSpecificListing.detach().empty();
     $("main").append($planeListings);
     document.documentElement.scrollTo({
@@ -460,6 +461,7 @@ $(() => {
     $login.detach();
     $signup.detach();
     $messages.empty();
+    $newmessage.empty();
     $viewSpecificListing.detach().empty();
     $("main").append($search);
     $search[0].scrollIntoView({ behavior: "smooth" });
@@ -500,6 +502,7 @@ $(() => {
     $login.detach();
     $signup.detach();
     $messages.empty();
+    $newmessage.empty();
     $viewSpecificListing.detach().empty();
     $("main").append($sell);
     $sell[0].scrollIntoView({ behavior: "smooth" });
@@ -546,6 +549,7 @@ $(() => {
     $login.detach();
     $signup.detach();
     $messages.empty();
+    $newmessage.empty();
     $viewSpecificListing.detach().empty();
     $.ajax({
       method: "GET",
@@ -568,6 +572,7 @@ $(() => {
     $login.detach();
     $signup.detach();
     $messages.empty();
+    $newmessage.empty();
     $viewSpecificListing.detach().empty();
     $.ajax({
       method: "GET",
@@ -582,6 +587,7 @@ $(() => {
   });
 
   const $messages = $(".all-messages");
+  const $newmessage = $(".new-message");
   const createMessageListing = function (message, index) {
     return `
     <div class="message-container">
@@ -640,19 +646,83 @@ $(() => {
       });
   });
 
+  const $button = $(
+    `<button class="mes_compose_button">Compose New Message</button>`
+  );
+  const $newMsg = $(`
+  <div class= "new-msg-container">
+  <form id="new-msg-Form">
+        <label for="new-dropdown">Select a Listing:</label>
+        <select id="new-dropdown" name="dropdown">
+      </select>
+      <br>
+    <label for="msg-Field">Enter message:</label>
+    <input type="text" id="msg-Field" name="msg-Field" required>
+    <button type="submit">Submit Message</button>
+    <p class="new-msg-p"></p>
+  </form>
+  </div>
+  `);
+  const createNewMessage = function (listing) {
+    return `
+        <option value="${listing.user_id}_${listing.id}">${listing.title}</option>
+    `;
+  };
+  $messages.on("click", ".mes_compose_button", function () {
+    console.log("compose new message clicked");
+    $messages.empty();
+    $.ajax({
+      method: "GET",
+      url: "/api/planes/listings/search",
+    }).then((results) => {
+      const lismsg = results.planes;
+      $newmessage.append($newMsg);
+      lismsg.forEach((lis) => {
+        const $nems = createNewMessage(lis);
+        $("#new-dropdown").append($nems);
+      });
+    });
+  });
+
+  $newmessage.on("submit", "#new-msg-Form", function (event) {
+    console.log("new message submitted");
+    event.preventDefault();
+    let joinedVal = $("#new-dropdown").val();
+    const lisitng_id = joinedVal.split("_")[1];
+    const receiver_id = joinedVal.split("_")[0];
+    const formData = {
+      listing_id: lisitng_id,
+      receiver_id: receiver_id,
+      content: $("#msg-Field").val(),
+    };
+    $.ajax({
+      method: "POST",
+      url: "/api/planes/messages",
+      data: formData,
+    })
+      .then((results) => {
+        $(".new-msg-p").text("Message sent!");
+        $("#msg-Field").val(" ");
+      })
+      .catch((error) => {
+        console.log("error during ajax:", error);
+      });
+  });
+
   const renderMessages = function (messages) {
     $messages.empty();
+    $messages.append($button);
     messages.forEach((message, index) => {
       const $msg = createMessageListing(message, index);
       $messages.append($msg);
     });
   };
   $header.on("click", ".messages", function () {
-    console.log("message link clicked");
     $.ajax({
       method: "GET",
       url: "/api/planes/messages",
     }).then((results) => {
+      $newmessage.empty();
       $planeListings.detach();
       $search.detach();
       $sell.detach();

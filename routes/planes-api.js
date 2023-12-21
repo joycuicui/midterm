@@ -199,7 +199,6 @@ router.post("/messages", (req, res) => {
   const sender_id = req.session.userId;
   const d = new Date();
   const time = d.toLocaleString();
-  console.log(time);
   const { listing_id, receiver_id, content } = req.body;
   database
     .postMessages(listing_id, sender_id, receiver_id, content, time)
