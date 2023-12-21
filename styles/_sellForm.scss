@@ -16,7 +16,10 @@
 }
 .planeForm {
   display: flex;
-  justify-content: space-around;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  // justify-content: space-around;
 }
 .form-left {
   display: flex;
@@ -27,9 +30,11 @@ input {
   outline: none;
   margin-top: 2rem;
   padding: 1rem 5rem;
-  border-color: #c69963;
+  // border-color: #c69963;
+  // border-radius: 2rem;
+  // border-width: 3px;
   border-radius: 2rem;
-  border-width: 3px;
+  border: 0.3rem solid #c69963;
 }
 
 textarea {
