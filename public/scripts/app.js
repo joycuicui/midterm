@@ -199,7 +199,7 @@ const divider = function (string) {
 //   </div>
 // `);
 
-const $viewSpecificListing = $(".view-specific-listing");/*--MY CODE SNIPPET--*/
+const $viewSpecificListing = $(".view-specific-listing");
 const $fullListingDetails = $(`
   <div class="view-top">
   <h2 id="planes-title"></h2>
@@ -443,6 +443,7 @@ $(() => {
     $planeListings.detach();
     $search.detach();
     $sell.detach();
+    $viewSpecificListing.detach().empty();
     $("main").append($planeListings);
     document.documentElement.scrollTo({
       top: 0,
@@ -458,6 +459,7 @@ $(() => {
     $logout.detach();
     $login.detach();
     $signup.detach();
+    $viewSpecificListing.detach().empty();
     $("main").append($search);
     $search[0].scrollIntoView({ behavior: "smooth" });
 
@@ -496,6 +498,7 @@ $(() => {
     $logout.detach();
     $login.detach();
     $signup.detach();
+    $viewSpecificListing.detach().empty();
     $("main").append($sell);
     $sell[0].scrollIntoView({ behavior: "smooth" });
 
@@ -540,6 +543,7 @@ $(() => {
     $logout.detach();
     $login.detach();
     $signup.detach();
+    $viewSpecificListing.detach().empty();
     $.ajax({
       method: "GET",
       url: `api/planes/listings/user`,
@@ -560,6 +564,7 @@ $(() => {
     $logout.detach();
     $login.detach();
     $signup.detach();
+    $viewSpecificListing.detach().empty();
     $.ajax({
       method: "GET",
       url: `api/planes/listings/user/likes`,
@@ -649,6 +654,7 @@ $(() => {
       $sell.detach();
       $logout.detach();
       $login.detach();
+      $viewSpecificListing.detach().empty();
       renderMessages(results);
     });
   });
@@ -660,6 +666,7 @@ $(() => {
     $sell.detach();
     $logout.detach();
     $signup.detach();
+    $viewSpecificListing.detach().empty();
     $("main").append($login);
     $login[0].scrollIntoView({ behavior: "smooth" });
     const $loginFrom = $(".login-form");
@@ -706,6 +713,7 @@ $(() => {
     $sell.detach();
     $logout.detach();
     $login.detach();
+    $viewSpecificListing.detach().empty();
     $("main").append($signup);
     $signup[0].scrollIntoView({ behavior: "smooth" });
     const $signupFrom = $(".signup-form");
@@ -747,6 +755,7 @@ $(() => {
     $sell.detach();
     $login.detach();
     $signup.detach();
+    $viewSpecificListing.detach().empty();
     $("main").append($logout);
     $logout[0].scrollIntoView({ behavior: "smooth" });
     const $logoutButton = $(".logout-button");
@@ -775,67 +784,66 @@ $(() => {
 /////////////////////////
 /// Event listener for plane listing buttons
 //////////////////////////
+$planeListings.on("click", ".details-button", function () {
+  console.log("View Detail button clicked!");
+  console.log("Clicked element:", this);
+  const clickedPlaneId = $(this).data("plane-id");
+  console.log("plane id ---> ", clickedPlaneId);
 
-        $planeListings.on("click", ".details-button", function () {
-          console.log("View Detail button clicked!");
-          console.log("Clicked element:", this);
+  /*-- Detach HTML templates from DOM---*/
+  $planeListings.detach();
+  $search.detach();
+  $sell.detach();
 
-          const clickedPlaneId = $(this).data("plane-id");
-          console.log("plane id ---> ", clickedPlaneId);
+  /*-- Ajax call for full details of selected plane---*/
+  $.ajax({
+    method: "GET",
+    url: "/api/planes/listings/" + clickedPlaneId,
+  })
+  .then(function (results) {
+    console.log("planes:", results);
 
-          /*-- Detach HTML templates from DOM---*/
-          $planeListings.detach();
-          $search.detach();
-          $sell.detach();
-          //$viewSpecificListing.empty();
+    /*-- Append division header for DOM ---*/
+    $viewSpecificListing.append(divider("PLANE LISTING FULL DETAILS"));
 
-          /*-- Ajax call for full details of selected plane---*/
-          $.ajax({
-            method: "GET",
-            url: "/api/planes/listings/" + clickedPlaneId,
-          })
+    /*-- Append HTML template to $viewSpecificListing ---*/
+    $viewSpecificListing.append($fullListingDetails)
 
-          .then(function (results) {
-            console.log("planes:", results);
-            /*-- Append division header for DOM ---*/
-            $viewSpecificListing.append(divider("PLANE LISTING FULL DETAILS"));
-            /*-- Append HTML template to $viewSpecificListing ---*/
-            $viewSpecificListing.append($fullListingDetails)
-            /*-- Append $viewSpecificListing to DOM ---*/
-            $("main").append($viewSpecificListing);
+    /*-- Append $viewSpecificListing to DOM ---*/
+    $("main").append($viewSpecificListing);
+    $viewSpecificListing[0].scrollIntoView({ behavior: "smooth" });
 
-            /*-- Update HTML elements of the HTML Template of $viewSpecificListing ---*/
-            $("#planes-title").text(results.planes[0].title);
-            $("#planes-description").text(results.planes[0].description);
-            $("#planes-condition").text(results.planes[0].condition);
-            $("#planes-year").text(results.planes[0].year);
-            $("#planes-make").text(results.planes[0].make);
-            $("#planes-model").text(results.planes[0].model);
-            $("#planes-class").text(results.planes[0].planes_class);
-            $("#planes-airframe-hour").text(results.planes[0].airframe_hours);
-            $("#planes-engine-hours").text(results.planes[0].engine_hours);
-            $("#planes-price").text(results.planes[0].price);
-            $("#planes-user-id").text(results.planes[0].user_id);
-            $("#planes-date-posted").text(results.planes[0].date_posted);
+    /*-- Update HTML elements of the HTML Template of $viewSpecificListing ---*/
+    $("#planes-title").text(results.planes[0].title);
+    $("#planes-description").text(results.planes[0].description);
+    $("#planes-condition").text(results.planes[0].condition);
+    $("#planes-year").text(results.planes[0].year);
+    $("#planes-make").text(results.planes[0].make);
+    $("#planes-model").text(results.planes[0].model);
+    $("#planes-class").text(results.planes[0].planes_class);
+    $("#planes-airframe-hour").text(results.planes[0].airframe_hours);
+    $("#planes-engine-hours").text(results.planes[0].engine_hours);
+    $("#planes-price").text(results.planes[0].price);
+    $("#planes-user-id").text(results.planes[0].user_id);
+    $("#planes-date-posted").text(results.planes[0].date_posted);
 
-            /*-- Change img html tag source of $viewSpecificListing to display the image properly ---*/
-            $("#planes-image-path").attr("src", results.planes[0].img_path);
+    /*-- Change img html tag source of $viewSpecificListing to display the image properly ---*/
+    $("#planes-image-path").attr("src", results.planes[0].img_path);
 
-            /*-- Check if the currentUser is defined, if not set to null ---*/
-            console.log("current user id:", currentUser ? currentUser.id : null);
+    /*-- Check if the currentUser is defined, if not set to null ---*/
+    console.log("current user id:", currentUser ? currentUser.id : null);
 
-            /*-- Check if the current user is the owner of the plane ---*/
-            const isCurrentUserOwner = currentUser && results.planes[0].user_id === currentUser.id;
+    /*-- Check if the current user is the owner of the plane ---*/
+    const isCurrentUserOwner = currentUser && results.planes[0].user_id === currentUser.id;
 
-            /*-- Show or hide edit and delete buttons based on ownership ---*/
-            if (isCurrentUserOwner) {
-              $("#edit-button").show();
-              $("#delete-button").show();
-            } else {
-              $("#edit-button").hide();
-              $("#delete-button").hide();
-            }
-
-          })
-          .catch((error) => { console.log(error.message); });
-        })
+    /*-- Show or hide edit and delete buttons based on ownership ---*/
+    if (isCurrentUserOwner) {
+      $("#edit-button").show();
+      $("#delete-button").show();
+    } else {
+      $("#edit-button").hide();
+      $("#delete-button").hide();
+    }
+  })
+  .catch((error) => { console.log(error.message); });
+});
