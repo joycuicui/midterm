@@ -150,6 +150,7 @@ router.post("/listings", (req, res) => {
     return res.send("error for !userID in post/listings");
   }
   const newListing = req.body;
+  console.log(newListing);
   newListing.owner_id = userId;
   database
     .addListing(newListing)

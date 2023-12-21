@@ -537,7 +537,7 @@ $(() => {
         planes_class: $("#class").val(),
         airframe_hours: $("#airframeHours").val(),
         engine_hours: $("#engineHours").val(),
-        // img_path: $("#photoUrl").val(),
+        img_path: $("#photoUrl").val(),
       };
       console.log("sell form data:", formData);
       $.ajax({
