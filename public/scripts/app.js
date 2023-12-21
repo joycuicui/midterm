@@ -13,7 +13,7 @@ const updateHeader = function (user) {
     navBar = `
     <div class="nav-box">
       <div class="logo">
-        <i class="fa-solid fa-plane-up"></i>
+        <i class="fa-solid fa-plane-up fa-spin"></i>
       </div>
     <nav class="nav-bar">
         <ul class="nav-bar-items">
@@ -28,7 +28,7 @@ const updateHeader = function (user) {
     navBar = `
     <div class="nav-box">
       <div class="logo">
-        <i class="fa-solid fa-plane-up"></i>
+        <i class="fa-solid fa-plane-up fa-spin"></i>
       </div>
     <nav class="nav-bar">
         <ul class="nav-bar-items">
