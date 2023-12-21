@@ -1,0 +1,44 @@
+@import "./variables";
+
+.message-container {
+  border: 5px solid lighten($blue, 15%);
+  border-radius: 25px;
+  width: 50vw;
+  margin: 2rem auto;
+  // margin-top: 5rem;
+  padding: 12px;
+}
+.message-flex {
+  display: flex;
+  justify-content: space-around;
+}
+.message-list {
+  display: flex;
+  flex-direction: column;
+}
+.message-title {
+  font-weight: bold;
+}
+.message-list p {
+  color: #b28451;
+  margin-bottom: 2rem;
+}
+.message-sender p {
+  color: #b28451;
+  margin-bottom: 2rem;
+}
+.message-sender {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.message-form p {
+  font-weight: bold;
+  margin-top: 10px;
+  color: #101d2c;
+}
+.message-form input {
+  display: inline-block;
+  width: 70%;
+}

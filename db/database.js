@@ -141,35 +141,83 @@ const getMyLikes = function (user_id, limit = 10) {
 /*--- Function to get featured listings to be rendered on the home page---*/
 const getFeaturedList = function () {
   return db
-  .query (
-    `SELECT planes.*, users.name
+    .query(
+      `SELECT planes.*, users.name
     FROM planes
     JOIN users on users.id = user_id
     WHERE planes.featured = TRUE;`
-  )
-  .then((result) => {
-    return result.rows;
-  })
-  .catch((err) => {
-    console.log(err.message);
-  });
+    )
+    .then((result) => {
+      return result.rows;
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
 };
 
 /*--- Function to get all the data of selected plane to be used in the veiw details ---*/
 const getSpecificPlaneInfo = function (id) {
   return db
-  .query (
-    `SELECT planes.*, users.name
+    .query(
+      `SELECT planes.*, users.name
     FROM planes
     JOIN users on users.id = user_id
-    WHERE planes.id = $1;`, [id])
-  .then((result) => {
-    console.log("result.rows:", result.rows);
-    return result.rows;
-  })
-  .catch((err) => {
-    console.log(err.message);
-  });
+    WHERE planes.id = $1;`,
+      [id]
+    )
+    .then((result) => {
+      console.log("result.rows:", result.rows);
+      return result.rows;
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+/// MESSAGES
+////////////////////////////////////////////////////////////////////////////////////////////////
+const getMessages = function (userId) {
+  return db
+    .query(
+      `
+    SELECT messages.content,messages.time_sent,planes.title, planes.year,planes.id  AS planesID, planes.make, planes.model,users.name,users.id AS userID
+    FROM messages
+    JOIN planes ON messages.listing_id = planes.id
+    JOIN users ON messages.sender_id = users.id
+    WHERE messages.receiver_id = $1;
+    `,
+      [userId]
+    )
+    .then((result) => {
+      return result.rows;
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+};
+
+const postMessages = function (
+  listing_id,
+  sender_id,
+  receiver_id,
+  content,
+  time
+) {
+  return db
+    .query(
+      `
+    INSERT INTO messages (listing_id, sender_id, receiver_id, content, time_sent)
+    VALUES ($1,$2,$3,$4,$5);
+    `,
+      [listing_id, sender_id, receiver_id, content, time]
+    )
+    .then((result) => {
+      return result.rows;
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
 };
 
 module.exports = {
@@ -181,4 +229,6 @@ module.exports = {
   addUser,
   getFeaturedList,
   getSpecificPlaneInfo,
+  getMessages,
+  postMessages,
 };

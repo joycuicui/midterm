@@ -488,13 +488,94 @@ $(() => {
     });
   });
 
-  $header.on("click", ".messages", function () {});
+  const $messages = $(".all-messages");
+  const createMessageListing = function (message, index) {
+    return `
+    <div class="message-container">
+    <div class="message-flex">
+    <div class="message-list">
+     <p class="message-title">Messsage for the listing:</p>
+    <p>Title: ${message.title}</p>
+    <p>Year:${message.year}</p>
+    <p>Make:${message.make} </p>
+    <p>Model:${message.model} </p>
+    </div>
+   <div class="message-sender">
+    <p >Message: ${message.content} </p>
+    <p>Sent by: ${message.name} </p>
+  <p>At:${message.time_sent} </p>
+  </div>
+  </div>
+  <div class="message-form">
+<p>Reply to this message:</p>
+<form class="message-reply" data-id=${index}  >
+<input type="hidden" id ="receiver_id_${index}" name="receiver_id" value=${message.userid}>
+<input type="hidden" id ="listing_id_${index}" name="listing_id" value=${message.planesid}>
+<input type="text" id = "content_${index}" name="content" required>
+<p id = "sent-text_${index}"></p>
+<button>Submit</button>
+</form>
+
+</div>
+</div>
+  `;
+  };
+
+  $messages.on("submit", ".message-reply", function (event) {
+    event.preventDefault();
+    const id = event.target.dataset.id;
+    const list = `#listing_id_${id}`;
+    const rec = `#receiver_id_${id}`;
+    const con = `#content_${id}`;
+    const formData = {
+      listing_id: $(list).val(),
+      receiver_id: $(rec).val(),
+      content: $(con).val(),
+    };
+    $.ajax({
+      method: "POST",
+      url: "/api/planes/messages",
+      data: formData,
+    })
+      .then((results) => {
+        const mm = `#sent-text_${id}`;
+        $(mm).text("Message sent!");
+        $(con).val(" ");
+      })
+      .catch((error) => {
+        console.log("error during ajax:", error);
+      });
+  });
+
+  const renderMessages = function (messages) {
+    $messages.empty();
+    messages.forEach((message, index) => {
+      const $msg = createMessageListing(message, index);
+      $messages.append($msg);
+    });
+  };
+  $header.on("click", ".messages", function () {
+    console.log("message link clicked");
+    $.ajax({
+      method: "GET",
+      url: "/api/planes/messages",
+    }).then((results) => {
+      $planeListings.detach();
+      $search.detach();
+      $sell.detach();
+      $logout.detach();
+      $login.detach();
+      renderMessages(results);
+    });
+  });
+
   $header.on("click", ".login", function () {
     console.log("login got clicked!");
     $planeListings.detach();
     $search.detach();
     $sell.detach();
     $logout.detach();
+    $signup.detach();
     $("main").append($login);
     $login[0].scrollIntoView({ behavior: "smooth" });
     const $loginFrom = $(".login-form");

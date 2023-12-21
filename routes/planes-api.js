@@ -22,7 +22,6 @@ const database = require("../db/database");
 /// GET / => home page, shows all listings that are tagged feature = True in the db
 //////////////////////////////////////////////////////////////////////////////////////
 router.get("/", (req, res) => {
-
   database
     .getFeaturedList()
     .then((planes) => res.send({ planes }))
@@ -93,12 +92,12 @@ router.get("/listings/:id", (req, res) => {
   console.log("please work");
 
   database
-  .getSpecficPlaneInfo(clickedPlaneId)
-  .then((planes) => res.send({ planes }))
-  .catch((err) => {
-    console.error(err);
-    res.send(err);
-  });
+    .getSpecficPlaneInfo(clickedPlaneId)
+    .then((planes) => res.send({ planes }))
+    .catch((err) => {
+      console.error(err);
+      res.send(err);
+    });
 });
 
 //////////////////////////////////////////////////////////////////////////////////////
@@ -177,6 +176,37 @@ router.post("/listings/:id/likes", (req, res) => {
     .then((like) => res.send({ like }))
     .catch((err) => {
       console.error(err);
+      res.send(err);
+    });
+});
+
+//////////////////////////////////////////////////////////////////////////////////////
+/// GET /messages/:id => get messages for a user's listings
+//////////////////////////////////////////////////////////////////////////////////////
+router.get("/messages", (req, res) => {
+  const userId = req.session.userId;
+  database
+    .getMessages(userId)
+    .then((messages) => {
+      res.send(messages);
+    })
+    .catch((err) => {
+      res.send(err);
+    });
+});
+
+router.post("/messages", (req, res) => {
+  const sender_id = req.session.userId;
+  const d = new Date();
+  const time = d.toLocaleString();
+  console.log(time);
+  const { listing_id, receiver_id, content } = req.body;
+  database
+    .postMessages(listing_id, sender_id, receiver_id, content, time)
+    .then((messages) => {
+      res.send(messages);
+    })
+    .catch((err) => {
       res.send(err);
     });
 });
