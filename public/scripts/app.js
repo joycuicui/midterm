@@ -506,6 +506,7 @@ $(() => {
           $("main").append($planeListings);
           $search.detach();
           renderListings(results.planes, "search results");
+          $searchForm.find("input[type=text], input[type=number]").val("");
         })
         .catch((error) => {
           console.log(error.message);
