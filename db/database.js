@@ -174,11 +174,7 @@ const getSpecificPlaneInfo = function (id) {
     });
 };
 /*--- Function to add new listing data ---*/
-const addListing = function (
-  id, title, description, condition, year, make, model,
-  planes_class, airframe_hours, engine_hours, img_path, price,
-  active, sold, featured )
-  {
+const addListing = function (newListing) {
   return db
     .query(
       `INSERT INTO planes (
@@ -187,9 +183,21 @@ const addListing = function (
         active, sold, featured, date_posted
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, CURRENT_TIMESTAMP) RETURNING *;`,
       [
-        id, title, description, condition, year, make, model,
-        planes_class, airframe_hours, engine_hours, img_path, price,
-        active, sold, featured
+        newListing.id,
+        newListing.title,
+        newListing.description,
+        newListing.condition,
+        newListing.year,
+        newListing.make,
+        newListing.model,
+        newListing.planes_class,
+        newListing.airframe_hours,
+        newListing.engine_hours,
+        newListing.img_path,
+        newListing.price,
+        newListing.active,
+        newListing.sold,
+        newListing.featured,
       ]
     )
     .then((result) => {
@@ -201,10 +209,8 @@ const addListing = function (
     });
 };
 
-
 /*--- Function to delete specific listing by id ---*/
-const deleteListing = function(id)
-{
+const deleteListing = function (id) {
   return db
     .query(
       `DELETE FROM planes
@@ -265,8 +271,6 @@ const postMessages = function (
       console.log(err.message);
     });
 };
-
-
 
 module.exports = {
   getPlanes,

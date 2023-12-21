@@ -1,5 +1,6 @@
 // Client facing scripts here
 const $header = $(".header");
+const $viewOurPlanes = $("#view-our-planes");
 
 let currentUser = null;
 
@@ -430,6 +431,24 @@ $(() => {
   $("main").append($planeListings);
   loadListings();
 
+  $viewOurPlanes.on("click", function () {
+    $planeListings.empty();
+    $search.detach();
+    $sell.detach();
+    $logout.detach();
+    $login.detach();
+    $signup.detach();
+    $messages.empty();
+    $viewSpecificListing.detach().empty();
+    $.ajax({
+      method: "GET",
+      url: `api/planes/all`,
+    }).then((results) => {
+      $("main").append($planeListings);
+      renderListings(results.planes, "all plane listings");
+      $planeListings[0].scrollIntoView({ behavior: "smooth" });
+    });
+  });
   ////////////////////////////////////////////////////////////////////////
   /// event listeners for header elements: home, search, myListing...
   ////////////////////////////////////////////////////////////////////////
@@ -521,7 +540,7 @@ $(() => {
         planes_class: $("#class").val(),
         airframe_hours: $("#airframeHours").val(),
         engine_hours: $("#engineHours").val(),
-        // img_path: $("#photoUrl").val(),
+        img_path: $("#photoUrl").val(),
       };
       console.log("sell form data:", formData);
       $.ajax({
@@ -557,9 +576,8 @@ $(() => {
     }).then((results) => {
       console.log("results in my listings:", results.listings);
       $("main").append($planeListings);
-      $planeListings[0].scrollIntoView({ behavior: "smooth" });
-
       renderListings(results.listings, "my listings");
+      $planeListings[0].scrollIntoView({ behavior: "smooth" });
     });
   });
 
@@ -580,9 +598,9 @@ $(() => {
     }).then((results) => {
       console.log("results in my liked listings:", results.likedListings);
       $("main").append($planeListings);
-      $planeListings[0].scrollIntoView({ behavior: "smooth" });
 
       renderListings(results.likedListings, "my favorite planes");
+      $planeListings[0].scrollIntoView({ behavior: "smooth" });
     });
   });
 
