@@ -8,15 +8,15 @@ const database = require("../db/database");
 //////////////////////////////////////////////////////////////////////////////////////
 /// GET / => home page, shows all plane listings, limiting to 10
 //////////////////////////////////////////////////////////////////////////////////////
-//router.get("/", (req, res) => {
-//  database
-//    .getPlanes(req.query, 10)
-//    .then((planes) => res.send({ planes }))
-//    .catch((err) => {
-//      console.error(err);
-//      res.send(err);
-//    });
-//});
+router.get("/all", (req, res) => {
+  database
+    .getPlanes(req.query, 20)
+    .then((planes) => res.send({ planes }))
+    .catch((err) => {
+      console.error(err);
+      res.send(err);
+    });
+});
 
 //////////////////////////////////////////////////////////////////////////////////////
 /// GET / => home page, shows all listings that are tagged feature = True in the db
