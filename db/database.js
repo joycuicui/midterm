@@ -156,7 +156,7 @@ const getFeaturedList = function () {
 };
 
 /*--- Function to get all the data of selected plane to be used in the veiw details ---*/
-const getSpecficPlaneInfo = function (id) {
+const getSpecificPlaneInfo = function (id) {
   return db
   .query (
     `SELECT planes.*, users.name
@@ -180,5 +180,5 @@ module.exports = {
   getUserWithId,
   addUser,
   getFeaturedList,
-  getSpecficPlaneInfo,
+  getSpecificPlaneInfo,
 };
