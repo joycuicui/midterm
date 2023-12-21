@@ -172,15 +172,6 @@ const $search = $(`
   `);
 
 const $planeListings = $(".all-listings");
-// const $planeListings = $(`
-//     <section class="all-listings">
-//       <div class="divider">
-//         <div class="divider-line"></div>
-//         <h2 class="divider-text">Featured Listings</h2>
-//         <div class="divider-line"></div>
-//       </div>
-//     </section>
-//     `);
 
 const divider = function (string) {
   return `
@@ -189,16 +180,8 @@ const divider = function (string) {
     <h2 class="divider-text">${string}</h2>
     <div class="divider-line"></div>
   </div>
-
   `;
 };
-// const $divider = $(`
-//   <div class="divider">
-//     <div class="divider-line"></div>
-//     <h2 class="divider-text">Featured Listings</h2>
-//     <div class="divider-line"></div>
-//   </div>
-// `);
 
 const $viewSpecificListing = $(".view-specific-listing");
 const $fullListingDetails = $(`
@@ -420,17 +403,15 @@ $(() => {
     updateHeader(json.user);
   });
 
-  // testing: when there is a user logged in
-  // const testUser = { name: "abc" };
-  // testing: when there is no user logged in
-  // const testUser = null;
-  // updateHeader(testUser);
   $search.detach();
   $sell.detach();
   $viewSpecificListing.detach().empty();
   $("main").append($planeListings);
   loadListings();
 
+  ////////////////////////////////////////////////////////////////////////
+  /// event listener for header button: VIEW OUR PLANES
+  ////////////////////////////////////////////////////////////////////////
   $viewOurPlanes.on("click", function () {
     $planeListings.empty();
     $search.detach();
@@ -449,10 +430,10 @@ $(() => {
       $planeListings[0].scrollIntoView({ behavior: "smooth" });
     });
   });
-  ////////////////////////////////////////////////////////////////////////
-  /// event listeners for header elements: home, search, myListing...
-  ////////////////////////////////////////////////////////////////////////
 
+  ////////////////////////////////////////////////////////////////////////
+  /// event listeners for nav-bar button: HOME
+  ////////////////////////////////////////////////////////////////////////
   $header.on("click", ".home", function () {
     console.log("home got clicked!");
     $logout.detach();
@@ -472,6 +453,9 @@ $(() => {
     loadListings();
   });
 
+  ////////////////////////////////////////////////////////////////////////
+  /// event listeners for nav-bar button: SEARCH
+  ////////////////////////////////////////////////////////////////////////
   $header.on("click", ".search", function () {
     console.log("search got clicked!");
     $planeListings.detach();
@@ -514,6 +498,9 @@ $(() => {
     });
   });
 
+  ////////////////////////////////////////////////////////////////////////
+  /// event listeners for nav-bar button: SELL
+  ////////////////////////////////////////////////////////////////////////
   $header.on("click", ".sell", function () {
     console.log("sell got clicked!");
     $planeListings.detach();
@@ -560,6 +547,10 @@ $(() => {
         });
     });
   });
+
+  ////////////////////////////////////////////////////////////////////////
+  /// event listeners for nav-bar button: LISTINGS
+  ////////////////////////////////////////////////////////////////////////
   $header.on("click", ".my-listings", function () {
     $planeListings.empty();
     console.log("current user id:", currentUser.id);
@@ -582,6 +573,9 @@ $(() => {
     });
   });
 
+  ////////////////////////////////////////////////////////////////////////
+  /// event listeners for nav-bar button: FAVORITES
+  ////////////////////////////////////////////////////////////////////////
   $header.on("click", ".my-likes", function () {
     $planeListings.empty();
     console.log("current user id:", currentUser.id);
@@ -605,6 +599,9 @@ $(() => {
     });
   });
 
+  ////////////////////////////////////////////////////////////////////////
+  /// event listeners for messaging related functions
+  ////////////////////////////////////////////////////////////////////////
   const $messages = $(".all-messages");
   const $newmessage = $(".new-message");
   const createMessageListing = function (message, index) {
@@ -638,7 +635,6 @@ $(() => {
 </div>
   `;
   };
-
   $messages.on("submit", ".message-reply", function (event) {
     event.preventDefault();
     const id = event.target.dataset.id;
@@ -664,7 +660,6 @@ $(() => {
         console.log("error during ajax:", error);
       });
   });
-
   const $button = $(
     `<button class="mes_compose_button">Compose New Message</button>`
   );
@@ -702,7 +697,6 @@ $(() => {
       });
     });
   });
-
   $newmessage.on("submit", "#new-msg-Form", function (event) {
     console.log("new message submitted");
     event.preventDefault();
@@ -727,7 +721,6 @@ $(() => {
         console.log("error during ajax:", error);
       });
   });
-
   const renderMessages = function (messages) {
     $messages.empty();
     $messages.append($button);
@@ -736,6 +729,10 @@ $(() => {
       $messages.append($msg);
     });
   };
+
+  ////////////////////////////////////////////////////////////////////////
+  /// event listeners for nav-bar button: messages
+  ////////////////////////////////////////////////////////////////////////
   $header.on("click", ".messages", function () {
     $.ajax({
       method: "GET",
@@ -752,6 +749,9 @@ $(() => {
     });
   });
 
+  ////////////////////////////////////////////////////////////////////////
+  /// event listeners for nav-bar button: LOGIN
+  ////////////////////////////////////////////////////////////////////////
   $header.on("click", ".login", function () {
     console.log("login got clicked!");
     $planeListings.detach();
@@ -800,6 +800,10 @@ $(() => {
       loadListings();
     });
   });
+
+  ////////////////////////////////////////////////////////////////////////
+  /// event listeners for nav-bar button: SIGNUP
+  ////////////////////////////////////////////////////////////////////////
   $header.on("click", ".signup", function () {
     console.log("signup got clicked!");
     $planeListings.detach();
@@ -843,6 +847,9 @@ $(() => {
     });
   });
 
+  ////////////////////////////////////////////////////////////////////////
+  /// event listeners for nav-bar button: LOGOUT
+  ////////////////////////////////////////////////////////////////////////
   $header.on("click", ".logout", function () {
     console.log("logout got clicked!");
     $planeListings.detach();
@@ -876,9 +883,9 @@ $(() => {
   });
 });
 
-/////////////////////////
-/// Event listener for plane listing buttons
-//////////////////////////
+////////////////////////////////////////////////////////////////////////
+/// event listeners for plane listing buttons: VIEW DETAILS
+////////////////////////////////////////////////////////////////////////
 $planeListings.on("click", ".details-button", function () {
   console.log("View Detail button clicked!");
   console.log("Clicked element:", this);
