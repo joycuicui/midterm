@@ -328,7 +328,6 @@ const renderListings = function (listings, sectionName) {
 };
 
 const loadListings = function () {
-
   console.log("load listings function...");
   console.log("ajax url:", "/api/planes");
   $.ajax({
@@ -339,7 +338,6 @@ const loadListings = function () {
       console.log("results:", results);
       console.log("results.planes:", results.planes);
       renderListings(results.planes, "featured listings");
-
     })
     .catch((err) => {
       console.log(err.message);
@@ -444,6 +442,7 @@ $(() => {
     $planeListings.detach();
     $search.detach();
     $sell.detach();
+    $messages.empty();
     $viewSpecificListing.detach().empty();
     $("main").append($planeListings);
     document.documentElement.scrollTo({
@@ -460,6 +459,7 @@ $(() => {
     $logout.detach();
     $login.detach();
     $signup.detach();
+    $messages.empty();
     $viewSpecificListing.detach().empty();
     $("main").append($search);
     $search[0].scrollIntoView({ behavior: "smooth" });
@@ -499,6 +499,7 @@ $(() => {
     $logout.detach();
     $login.detach();
     $signup.detach();
+    $messages.empty();
     $viewSpecificListing.detach().empty();
     $("main").append($sell);
     $sell[0].scrollIntoView({ behavior: "smooth" });
@@ -544,6 +545,7 @@ $(() => {
     $logout.detach();
     $login.detach();
     $signup.detach();
+    $messages.empty();
     $viewSpecificListing.detach().empty();
     $.ajax({
       method: "GET",
@@ -565,6 +567,7 @@ $(() => {
     $logout.detach();
     $login.detach();
     $signup.detach();
+    $messages.empty();
     $viewSpecificListing.detach().empty();
     $.ajax({
       method: "GET",
@@ -667,6 +670,7 @@ $(() => {
     $sell.detach();
     $logout.detach();
     $signup.detach();
+    $messages.empty();
     $viewSpecificListing.detach().empty();
     $("main").append($login);
     $login[0].scrollIntoView({ behavior: "smooth" });
@@ -714,6 +718,7 @@ $(() => {
     $sell.detach();
     $logout.detach();
     $login.detach();
+    $messages.empty();
     $viewSpecificListing.detach().empty();
     $("main").append($signup);
     $signup[0].scrollIntoView({ behavior: "smooth" });
@@ -755,6 +760,7 @@ $(() => {
     $search.detach();
     $sell.detach();
     $login.detach();
+    $messages.empty();
     $signup.detach();
     $viewSpecificListing.detach().empty();
     $("main").append($logout);
@@ -781,7 +787,6 @@ $(() => {
   });
 });
 
-
 /////////////////////////
 /// Event listener for plane listing buttons
 //////////////////////////
@@ -801,50 +806,53 @@ $planeListings.on("click", ".details-button", function () {
     method: "GET",
     url: "/api/planes/listings/" + clickedPlaneId,
   })
-  .then(function (results) {
-    console.log("planes:", results);
+    .then(function (results) {
+      console.log("planes:", results);
 
-    /*-- Append division header for DOM ---*/
-    $viewSpecificListing.append(divider("PLANE LISTING FULL DETAILS"));
+      /*-- Append division header for DOM ---*/
+      $viewSpecificListing.append(divider("PLANE LISTING FULL DETAILS"));
 
-    /*-- Append HTML template to $viewSpecificListing ---*/
-    $viewSpecificListing.append($fullListingDetails)
+      /*-- Append HTML template to $viewSpecificListing ---*/
+      $viewSpecificListing.append($fullListingDetails);
 
-    /*-- Append $viewSpecificListing to DOM ---*/
-    $("main").append($viewSpecificListing);
-    $viewSpecificListing[0].scrollIntoView({ behavior: "smooth" });
+      /*-- Append $viewSpecificListing to DOM ---*/
+      $("main").append($viewSpecificListing);
+      $viewSpecificListing[0].scrollIntoView({ behavior: "smooth" });
 
-    /*-- Update HTML elements of the HTML Template of $viewSpecificListing ---*/
-    $("#planes-title").text(results.planes[0].title);
-    $("#planes-description").text(results.planes[0].description);
-    $("#planes-condition").text(results.planes[0].condition);
-    $("#planes-year").text(results.planes[0].year);
-    $("#planes-make").text(results.planes[0].make);
-    $("#planes-model").text(results.planes[0].model);
-    $("#planes-class").text(results.planes[0].planes_class);
-    $("#planes-airframe-hour").text(results.planes[0].airframe_hours);
-    $("#planes-engine-hours").text(results.planes[0].engine_hours);
-    $("#planes-price").text(results.planes[0].price);
-    $("#planes-user-id").text(results.planes[0].user_id);
-    $("#planes-date-posted").text(results.planes[0].date_posted);
+      /*-- Update HTML elements of the HTML Template of $viewSpecificListing ---*/
+      $("#planes-title").text(results.planes[0].title);
+      $("#planes-description").text(results.planes[0].description);
+      $("#planes-condition").text(results.planes[0].condition);
+      $("#planes-year").text(results.planes[0].year);
+      $("#planes-make").text(results.planes[0].make);
+      $("#planes-model").text(results.planes[0].model);
+      $("#planes-class").text(results.planes[0].planes_class);
+      $("#planes-airframe-hour").text(results.planes[0].airframe_hours);
+      $("#planes-engine-hours").text(results.planes[0].engine_hours);
+      $("#planes-price").text(results.planes[0].price);
+      $("#planes-user-id").text(results.planes[0].user_id);
+      $("#planes-date-posted").text(results.planes[0].date_posted);
 
-    /*-- Change img html tag source of $viewSpecificListing to display the image properly ---*/
-    $("#planes-image-path").attr("src", results.planes[0].img_path);
+      /*-- Change img html tag source of $viewSpecificListing to display the image properly ---*/
+      $("#planes-image-path").attr("src", results.planes[0].img_path);
 
-    /*-- Check if the currentUser is defined, if not set to null ---*/
-    console.log("current user id:", currentUser ? currentUser.id : null);
+      /*-- Check if the currentUser is defined, if not set to null ---*/
+      console.log("current user id:", currentUser ? currentUser.id : null);
 
-    /*-- Check if the current user is the owner of the plane ---*/
-    const isCurrentUserOwner = currentUser && results.planes[0].user_id === currentUser.id;
+      /*-- Check if the current user is the owner of the plane ---*/
+      const isCurrentUserOwner =
+        currentUser && results.planes[0].user_id === currentUser.id;
 
-    /*-- Show or hide edit and delete buttons based on ownership ---*/
-    if (isCurrentUserOwner) {
-      $("#edit-button").show();
-      $("#delete-button").show();
-    } else {
-      $("#edit-button").hide();
-      $("#delete-button").hide();
-    }
-  })
-  .catch((error) => { console.log(error.message); });
+      /*-- Show or hide edit and delete buttons based on ownership ---*/
+      if (isCurrentUserOwner) {
+        $("#edit-button").show();
+        $("#delete-button").show();
+      } else {
+        $("#edit-button").hide();
+        $("#delete-button").hide();
+      }
+    })
+    .catch((error) => {
+      console.log(error.message);
+    });
 });
