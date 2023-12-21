@@ -513,7 +513,7 @@ INSERT INTO planes (
   'FALSE',
   '2022-12-21 01:08'),
   ( 1,
-  '2010 American Champion 8-KCAB',
+  '2010 American Champion',
   'Stock # N240RJ 2010 AMERICAN CHAMPION 8-KCAB SUPER DECATHLON, Single Engine Piston, 2010 ACA Super Decathlon 8KCAB. Asking $219,500. 715 hrs TTSN. NDH, always hangared. Garmin GPSmap 696, SL40 Comm, GTX327 xpdr, uAvionix ADS-B out. MT 2 blade prop, 8 probe smartscanner, competition harness'', aft seat heat, tinted windows, aux power plug, aileron spades, B&C oil filter adapter, aft baggage door. August Annual by Midwest Aviation Services, Inc. Paducah, KY (KPAH).',
   'Good',
   2010,
