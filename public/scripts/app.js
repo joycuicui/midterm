@@ -328,7 +328,7 @@ const renderListings = function (listings, sectionName) {
 };
 
 const loadListings = function () {
-  $viewSpecificListing.detach().empty();
+
   console.log("load listings function...");
   console.log("ajax url:", "/api/planes");
   $.ajax({
@@ -428,6 +428,7 @@ $(() => {
   // updateHeader(testUser);
   $search.detach();
   $sell.detach();
+  $viewSpecificListing.detach().empty();
   $("main").append($planeListings);
   loadListings();
 
