@@ -8,9 +8,23 @@ const database = require("../db/database");
 //////////////////////////////////////////////////////////////////////////////////////
 /// GET / => home page, shows all plane listings, limiting to 10
 //////////////////////////////////////////////////////////////////////////////////////
+//router.get("/", (req, res) => {
+//  database
+//    .getPlanes(req.query, 10)
+//    .then((planes) => res.send({ planes }))
+//    .catch((err) => {
+//      console.error(err);
+//      res.send(err);
+//    });
+//});
+
+//////////////////////////////////////////////////////////////////////////////////////
+/// GET / => home page, shows all listings that are tagged feature = True in the db
+//////////////////////////////////////////////////////////////////////////////////////
 router.get("/", (req, res) => {
+
   database
-    .getPlanes(req.query, 10)
+    .getFeaturedList()
     .then((planes) => res.send({ planes }))
     .catch((err) => {
       console.error(err);
@@ -66,6 +80,25 @@ router.get("/listings/search", (req, res) => {
       console.error(err);
       res.send(err);
     });
+});
+
+//////////////////////////////////////////////////////////////////////////////////////
+/// GET /listings/:id => Shows all the details of the plane that was selected. Triggered from the View Button.
+//////////////////////////////////////////////////////////////////////////////////////
+
+router.get("/listings/:id", (req, res) => {
+  console.log("please work");
+  const clickedPlaneId = req.params.id;
+  console.log("Clicked plane ID:", clickedPlaneId);
+  console.log("please work");
+
+  database
+  .getSpecficPlaneInfo(clickedPlaneId)
+  .then((planes) => res.send({ planes }))
+  .catch((err) => {
+    console.error(err);
+    res.send(err);
+  });
 });
 
 //////////////////////////////////////////////////////////////////////////////////////
