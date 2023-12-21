@@ -274,7 +274,18 @@ const loadListings = function () {
           //$sell.detach();
           //$viewSpecificListing.empty();
 
-          
+          /*-- Ajax call for full details of selected plane---*/
+          $.ajax({
+            method: "GET",
+            url: "/api/planes/listings/" + clickedPlaneId,
+            data: clickedPlaneId,
+          }) /*-- closing for ajax call /api/planes/listings/" + clickedPlaneId --*/
+          .then(function (results) {
+            console.log("planes:", results);
+            console.log("results.planes:", results.planes);
+
+          }) /*-- closing for .then ---*/
+          .catch((error) => { console.log(error.message); });
         }) /*-- closing for .on --*/
       }); /*-- closing for the for each loop --*/
 
