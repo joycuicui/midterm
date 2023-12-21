@@ -1,12 +1,11 @@
 @import "./variables";
 
 .message-container {
-  border: 5px solid lighten($blue, 15%);
   border-radius: 25px;
-  width: 50vw;
+  width: 70vw;
   margin: 2rem auto;
-  // margin-top: 5rem;
-  padding: 12px;
+  background-color: #f9f7f6;
+  box-shadow: 0.7rem 0.7rem 1rem rgba(0, 0, 0, 0.2);
 }
 .message-flex {
   display: flex;
@@ -15,6 +14,7 @@
 .message-list {
   display: flex;
   flex-direction: column;
+  padding-top: 4rem;
 }
 .message-title {
   font-weight: bold;
@@ -33,6 +33,10 @@
   align-items: center;
   justify-content: center;
 }
+.message-form {
+  padding-left: 5rem;
+  padding-bottom: 4rem;
+}
 .message-form p {
   font-weight: bold;
   margin-top: 10px;
@@ -40,5 +44,5 @@
 }
 .message-form input {
   display: inline-block;
-  width: 70%;
+  width: 80%;
 }
