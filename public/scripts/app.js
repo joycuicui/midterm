@@ -199,6 +199,88 @@ const divider = function (string) {
 //   </div>
 // `);
 
+const $viewSpecificListing = $(".view-specific-listing");/*--MY CODE SNIPPET--*/
+const $fullListingDetails = $(`
+  <div class="view-top">
+  <h2 id="planes-title"></h2>
+  </div>
+  <div class="view-bottom">
+    <div class="plane-image">
+      <img class="view-right"
+        src=""
+        id = "planes-image-path"
+        alt="plane listing image"
+      />
+    </div>
+    <div class="view-right">
+        <div class="planeDesc">
+            <span class="value" id = "planes-description"></span>
+        </div>
+        <div class="ten-details">
+          <div class="first-five">
+            <div class="planesPrice">
+              <span class="label">PRICE :</span>
+              <span class="value" id = "planes-price"></span>
+            </div>
+            <div class="planeYear">
+              <span class="label">YEAR :</span>
+              <span class="value" id = "planes-year"></span>
+            </div>
+            <div class="planeMake">
+              <span class="label">MAKE :</span>
+              <span class="value" id = "planes-make"></span>
+            </div>
+            <div class="planeModel">
+              <span class="label">MODEL:</span>
+              <span class="value" id = "planes-model"></span>
+            </div>
+            <div class="planeCondition">
+              <span class="label">CONDIITON :</span>
+              <span class="value" id = "planes-condition"></span>
+            </div>
+          </div>
+          <div class="second-five">
+            <div class="planeClass">
+              <span class="label">CLASS :</span>
+              <span class="value" id = "planes-class"></span>
+            </div>
+            <div class="planeAirFrameHrs">
+              <span class="label">AIR FRAME HOURS :</span>
+              <span class="value" id = "planes-airframe-hours"></span>
+            </div>
+            <div class="planeEngineHrs">
+              <span class="label">ENGINE HOURS :</span>
+              <span class="value" id = "planes-engine-hours"></span>
+            </div>
+
+            <div class="planeSeller">
+              <span class="label">SELLER :</span>
+              <span class="value" id = "planes-user-id"></span>
+            </div>
+            <div class="planePosted">
+              <span class="label">DATE POSTED :</span>
+              <span class="value" id = "planes-date-posted"></span>
+            </div>
+          </div>
+      </div>
+        <div class="view-action-buttons">
+            <form action="" method="">
+              <button class="footer-button buy-button" id="buy-button">BUY</button>
+            </form>
+            <form action="" method="">
+              <button class="footer-button like-button" id="like-button"><i class="fa-solid fa-heart"></i></button>
+            </form>
+            <form action="" method="">
+              <button class="footer-button edit-button" id="edit-button">EDIT</button>
+            </form>
+            <form action="" method="">
+              <button class="footer-button delete-button" id="delete-button">DELETE</button>
+            </form>
+      </div>
+  </div>
+</div>
+`);
+
 const createListing = function (plane) {
   return `
   <article class="listing">
@@ -246,6 +328,7 @@ const renderListings = function (listings, sectionName) {
 };
 
 const loadListings = function () {
+  $viewSpecificListing.detach().empty();
   console.log("load listings function...");
   console.log("ajax url:", "/api/planes");
   $.ajax({
@@ -257,43 +340,11 @@ const loadListings = function () {
       console.log("results.planes:", results.planes);
       renderListings(results.planes, "featured listings");
 
-      /////////////////////////
-      /// Event listener for plane listing buttons
-      //////////////////////////
-      results.planes.forEach((plane) => {
-        $(`.details-button[data-plane-id="${plane.id}"]`).on("click", function () {
-          console.log("View Detail button clicked!");
-          console.log("Clicked element:", this);
-
-          const clickedPlaneId = $(this).data("plane-id");
-          console.log("plane id ---> ", clickedPlaneId);
-
-          /*-- Detach HTML templates and empty out  $viewSpecificListing from DOM---*/
-          //$planeListings.detach();
-          //$search.detach();
-          //$sell.detach();
-          //$viewSpecificListing.empty();
-
-          /*-- Ajax call for full details of selected plane---*/
-          $.ajax({
-            method: "GET",
-            url: "/api/planes/listings/" + clickedPlaneId,
-            data: clickedPlaneId,
-          }) /*-- closing for ajax call /api/planes/listings/" + clickedPlaneId --*/
-          .then(function (results) {
-            console.log("planes:", results);
-            console.log("results.planes:", results.planes);
-
-          }) /*-- closing for .then ---*/
-          .catch((error) => { console.log(error.message); });
-        }) /*-- closing for .on --*/
-      }); /*-- closing for the for each loop --*/
-
-    }) /*-- closing for the .then --*/
+    })
     .catch((err) => {
       console.log(err.message);
     });
-}; /*-- closing for loadListingsfunction --*/
+};
 
 const $logout = $(`
 <section class="logout-section">
@@ -719,3 +770,72 @@ $(() => {
     });
   });
 });
+
+
+/////////////////////////
+/// Event listener for plane listing buttons
+//////////////////////////
+
+        $planeListings.on("click", ".details-button", function () {
+          console.log("View Detail button clicked!");
+          console.log("Clicked element:", this);
+
+          const clickedPlaneId = $(this).data("plane-id");
+          console.log("plane id ---> ", clickedPlaneId);
+
+          /*-- Detach HTML templates from DOM---*/
+          $planeListings.detach();
+          $search.detach();
+          $sell.detach();
+          //$viewSpecificListing.empty();
+
+          /*-- Ajax call for full details of selected plane---*/
+          $.ajax({
+            method: "GET",
+            url: "/api/planes/listings/" + clickedPlaneId,
+          })
+
+          .then(function (results) {
+            console.log("planes:", results);
+            /*-- Append division header for DOM ---*/
+            $viewSpecificListing.append(divider("PLANE LISTING FULL DETAILS"));
+            /*-- Append HTML template to $viewSpecificListing ---*/
+            $viewSpecificListing.append($fullListingDetails)
+            /*-- Append $viewSpecificListing to DOM ---*/
+            $("main").append($viewSpecificListing);
+
+            /*-- Update HTML elements of the HTML Template of $viewSpecificListing ---*/
+            $("#planes-title").text(results.planes[0].title);
+            $("#planes-description").text(results.planes[0].description);
+            $("#planes-condition").text(results.planes[0].condition);
+            $("#planes-year").text(results.planes[0].year);
+            $("#planes-make").text(results.planes[0].make);
+            $("#planes-model").text(results.planes[0].model);
+            $("#planes-class").text(results.planes[0].planes_class);
+            $("#planes-airframe-hour").text(results.planes[0].airframe_hours);
+            $("#planes-engine-hours").text(results.planes[0].engine_hours);
+            $("#planes-price").text(results.planes[0].price);
+            $("#planes-user-id").text(results.planes[0].user_id);
+            $("#planes-date-posted").text(results.planes[0].date_posted);
+
+            /*-- Change img html tag source of $viewSpecificListing to display the image properly ---*/
+            $("#planes-image-path").attr("src", results.planes[0].img_path);
+
+            /*-- Check if the currentUser is defined, if not set to null ---*/
+            console.log("current user id:", currentUser ? currentUser.id : null);
+
+            /*-- Check if the current user is the owner of the plane ---*/
+            const isCurrentUserOwner = currentUser && results.planes[0].user_id === currentUser.id;
+
+            /*-- Show or hide edit and delete buttons based on ownership ---*/
+            if (isCurrentUserOwner) {
+              $("#edit-button").show();
+              $("#delete-button").show();
+            } else {
+              $("#edit-button").hide();
+              $("#delete-button").hide();
+            }
+
+          })
+          .catch((error) => { console.log(error.message); });
+        })
