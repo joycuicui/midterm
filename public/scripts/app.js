@@ -333,6 +333,7 @@ const renderListings = function (listings, sectionName) {
   console.log("listings:", listings);
 
   listings.forEach((plane) => {
+    console.log("I am inside here bunny!");
     const $listing = createListing(plane);
     $planeListings.append($listing);
   });
@@ -1005,11 +1006,6 @@ $viewSpecificListing.on("click", "#delete-button", function () {
   const clickedPlaneId = $(this).data("plane-id");
   console.log("plane id ---> ", clickedPlaneId);
 
-  ///*-- Detach HTML templates from DOM---*/
-  //$planeListings.detach();
-  //$search.detach();
-  //$sell.detach();
-//$viewSpecificListing.();
   ///*-- Ajax call deleting specific plane ---*/
   $.ajax({
     method: "DELETE",
@@ -1017,9 +1013,14 @@ $viewSpecificListing.on("click", "#delete-button", function () {
   })
     .then(function (results) {
      console.log("response received from api ---> ", results);
-     // detach all html templates
-     // load my listings again.
-
+     displayMsg('Success : Listing successfully deleted.');
+      // Redirect to the home page after a delay (e.g., 3 seconds)
+        setTimeout(function () {
+        $viewSpecificListing.detach().empty();
+        $("main").append($planeListings);
+        loadListings();
+        $planeListings[0].scrollIntoView({ behavior: "smooth" });
+          }, 3000);
   })
    .catch((error) => {
      console.log(error.message);
