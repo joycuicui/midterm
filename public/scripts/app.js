@@ -244,25 +244,17 @@ return `
             </div>
             <div class="planePosted">
               <span class="label">DATE POSTED :</span>
-              <span class="value" id = "planes-date-posted">${plane[0].date_posted}</span>
+              <span class="value" id = "planes-date-posted">${plane[0].date_posted}"</span>
             </div>
           </div>
       </div>
         <div class="view-buy-like-buttons">
-            <form action="" method="">
-              <button class="footer-button buy-button" id="buy-button">BUY</button>
-            </form>
-            <form action="" method="">
-              <button class="footer-button like-button" id="like-button"><i class="fa-solid fa-heart"></i></button>
-            </form>
+              <button class="footer-button buy-button" id="buy-button" data-plane-id="${plane[0].id}">BUY</button>
+              <button class="footer-button like-button" id="like-button" data-plane-id="${plane[0].id}"><i class="fa-solid fa-heart"></i></button>
         </div>
         <div class="view-edit-delete-buttons">
-            <form action="" method="">
-              <button class="footer-button edit-button" id="edit-button">EDIT</button>
-            </form>
-            <form action="" method="">
-              <button class="footer-button delete-button" id="delete-button">DELETE</button>
-            </form>
+              <button class="footer-button edit-button" id="edit-button" data-plane-id="${plane[0].id}">EDIT</button>
+              <button class="footer-button delete-button" id="delete-button" data-plane-id="${plane[0].id}">DELETE</button>
       </div>
   </div>
 </div>
@@ -974,4 +966,207 @@ $planeListings.on("click", ".details-button", function () {
     .catch((error) => {
       console.log(error.message);
     });
+});
+
+////////////////////////////////////////////////////////////////////////
+/// event listeners for plane listing buttons: DELETE
+////////////////////////////////////////////////////////////////////////
+$viewSpecificListing.on("click", "#delete-button", function () {
+  console.log("View Delete button clicked!");
+  console.log("Clicked element:", this);
+  const clickedPlaneId = $(this).data("plane-id");
+  console.log("plane id ---> ", clickedPlaneId);
+
+  ///*-- Detach HTML templates from DOM---*/
+  //$planeListings.detach();
+  //$search.detach();
+  //$sell.detach();
+//$viewSpecificListing.();
+  ///*-- Ajax call for full details of selected plane---*/
+  $.ajax({
+    method: "DELETE",
+    url: "/api/planes/listings/delete/" + clickedPlaneId,
+  })
+    .then(function (results) {
+     console.log("response received from api ---> ", results);
+
+  })
+   .catch((error) => {
+     console.log(error.message);
+   });
+  //    console.log("planes:", results);
+//
+  //      /*-- Append $viewSpecificListing to DOM ---*/
+  //    $("main").append($viewSpecificListing);
+//
+  //    /*-- Call function to render detailed listing ---*/
+  //    renderDetailedListings(results.planes,"PLANE LISTING FULL DETAILS");
+  //    $viewSpecificListing[0].scrollIntoView({ behavior: "smooth" });
+  //    /*-- Check if the currentUser is defined, if not set to null ---*/
+  //    console.log("current user id:", currentUser ? currentUser.id : null);
+//
+  //    /*-- Check if the current user is the owner of the plane ---*/
+  //    const isCurrentUserOwner =
+  //      currentUser && results.planes[0].user_id === currentUser.id;
+//
+  //    /*-- Show or hide edit and delete buttons based on ownership ---*/
+  //    if (isCurrentUserOwner) {
+  //      $(".view-edit-delete-buttons").show();
+  //      $(".view-buy-like-buttons").hide();
+  //    } else {
+  //      $(".view-edit-delete-buttons").hide();
+  //      $(".view-buy-like-buttons").show();
+  //    }
+  //  })
+  //  .catch((error) => {
+  //    console.log(error.message);
+  //  });
+});
+
+////////////////////////////////////////////////////////////////////////
+/// event listeners for plane listing buttons: LIKE
+////////////////////////////////////////////////////////////////////////
+$viewSpecificListing.on("click", "#like-button", function () {
+  console.log("View LIKE button clicked!");
+  console.log("Clicked element:", this);
+  const clickedPlaneId = $(this).data("plane-id");
+  console.log("plane id ---> ", clickedPlaneId);
+
+  ///*-- Detach HTML templates from DOM---*/
+  //$planeListings.detach();
+  //$search.detach();
+  //$sell.detach();
+//
+  ///*-- Ajax call for full details of selected plane---*/
+  //$.ajax({
+  //  method: "GET",
+  //  url: "/api/planes/listings/" + clickedPlaneId,
+  //})
+  //  .then(function (results) {
+  //    console.log("planes:", results);
+//
+  //      /*-- Append $viewSpecificListing to DOM ---*/
+  //    $("main").append($viewSpecificListing);
+//
+  //    /*-- Call function to render detailed listing ---*/
+  //    renderDetailedListings(results.planes,"PLANE LISTING FULL DETAILS");
+  //    $viewSpecificListing[0].scrollIntoView({ behavior: "smooth" });
+  //    /*-- Check if the currentUser is defined, if not set to null ---*/
+  //    console.log("current user id:", currentUser ? currentUser.id : null);
+//
+  //    /*-- Check if the current user is the owner of the plane ---*/
+  //    const isCurrentUserOwner =
+  //      currentUser && results.planes[0].user_id === currentUser.id;
+//
+  //    /*-- Show or hide edit and delete buttons based on ownership ---*/
+  //    if (isCurrentUserOwner) {
+  //      $(".view-edit-delete-buttons").show();
+  //      $(".view-buy-like-buttons").hide();
+  //    } else {
+  //      $(".view-edit-delete-buttons").hide();
+  //      $(".view-buy-like-buttons").show();
+  //    }
+  //  })
+  //  .catch((error) => {
+  //    console.log(error.message);
+  //  });
+});
+
+////////////////////////////////////////////////////////////////////////
+/// event listeners for plane listing buttons: BUY
+////////////////////////////////////////////////////////////////////////
+$viewSpecificListing.on("click", "#buy-button", function () {
+  console.log("View BUY button clicked!");
+  console.log("Clicked element:", this);
+  const clickedPlaneId = $(this).data("plane-id");
+  console.log("plane id ---> ", clickedPlaneId);
+
+  ///*-- Detach HTML templates from DOM---*/
+  //$planeListings.detach();
+  //$search.detach();
+  //$sell.detach();
+//
+  ///*-- Ajax call for full details of selected plane---*/
+  //$.ajax({
+  //  method: "GET",
+  //  url: "/api/planes/listings/" + clickedPlaneId,
+  //})
+  //  .then(function (results) {
+  //    console.log("planes:", results);
+//
+  //      /*-- Append $viewSpecificListing to DOM ---*/
+  //    $("main").append($viewSpecificListing);
+//
+  //    /*-- Call function to render detailed listing ---*/
+  //    renderDetailedListings(results.planes,"PLANE LISTING FULL DETAILS");
+  //    $viewSpecificListing[0].scrollIntoView({ behavior: "smooth" });
+  //    /*-- Check if the currentUser is defined, if not set to null ---*/
+  //    console.log("current user id:", currentUser ? currentUser.id : null);
+//
+  //    /*-- Check if the current user is the owner of the plane ---*/
+  //    const isCurrentUserOwner =
+  //      currentUser && results.planes[0].user_id === currentUser.id;
+//
+  //    /*-- Show or hide edit and delete buttons based on ownership ---*/
+  //    if (isCurrentUserOwner) {
+  //      $(".view-edit-delete-buttons").show();
+  //      $(".view-buy-like-buttons").hide();
+  //    } else {
+  //      $(".view-edit-delete-buttons").hide();
+  //      $(".view-buy-like-buttons").show();
+  //    }
+  //  })
+  //  .catch((error) => {
+  //    console.log(error.message);
+  //  });
+});
+
+////////////////////////////////////////////////////////////////////////
+/// event listeners for plane listing buttons: EDIT
+
+////////////////////////////////////////////////////////////////////////
+$viewSpecificListing.on("click", "#edit-button", function () {
+  console.log("View EDIT button clicked!");
+  console.log("Clicked element:", this);
+  const clickedPlaneId = $(this).data("plane-id");
+  console.log("plane id ---> ", clickedPlaneId);
+
+  ///*-- Detach HTML templates from DOM---*/
+  //$planeListings.detach();
+  //$search.detach();
+  //$sell.detach();
+//
+  ///*-- Ajax call for full details of selected plane---*/
+  //$.ajax({
+  //  method: "GET",
+  //  url: "/api/planes/listings/" + clickedPlaneId,
+  //})
+  //  .then(function (results) {
+  //    console.log("planes:", results);
+//
+  //      /*-- Append $viewSpecificListing to DOM ---*/
+  //    $("main").append($viewSpecificListing);
+//
+  //    /*-- Call function to render detailed listing ---*/
+  //    renderDetailedListings(results.planes,"PLANE LISTING FULL DETAILS");
+  //    $viewSpecificListing[0].scrollIntoView({ behavior: "smooth" });
+  //    /*-- Check if the currentUser is defined, if not set to null ---*/
+  //    console.log("current user id:", currentUser ? currentUser.id : null);
+//
+  //    /*-- Check if the current user is the owner of the plane ---*/
+  //    const isCurrentUserOwner =
+  //      currentUser && results.planes[0].user_id === currentUser.id;
+//
+  //    /*-- Show or hide edit and delete buttons based on ownership ---*/
+  //    if (isCurrentUserOwner) {
+  //      $(".view-edit-delete-buttons").show();
+  //      $(".view-buy-like-buttons").hide();
+  //    } else {
+  //      $(".view-edit-delete-buttons").hide();
+  //      $(".view-buy-like-buttons").show();
+  //    }
+  //  })
+  //  .catch((error) => {
+  //    console.log(error.message);
+  //  });
 });
