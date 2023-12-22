@@ -561,34 +561,13 @@ $(() => {
           //$("main").append($planeListings);
           $sell.detach();
 
-          //renderListings(results.planes, "my new listing");
-
-          /*-- Append division header for DOM ---*/
-          $viewSpecificListing.append(divider("PLANE LISTING FULL DETAILS"));
-
-          /*-- Append HTML template to $viewSpecificListing ---*/
-          $viewSpecificListing.append($fullListingDetails);
-
           /*-- Append $viewSpecificListing to DOM ---*/
           $("main").append($viewSpecificListing);
+
+          /*-- Call function to render detailed listing ---*/
+          renderDetailedListings(results.planes,"PLANE LISTING FULL DETAILS");
+
           $viewSpecificListing[0].scrollIntoView({ behavior: "smooth" });
-
-          /*-- Update HTML elements of the HTML Template of $viewSpecificListing ---*/
-          $("#planes-title").text(results.planes[0].title);
-          $("#planes-description").text(results.planes[0].description);
-          $("#planes-condition").text(results.planes[0].condition);
-          $("#planes-year").text(results.planes[0].year);
-          $("#planes-make").text(results.planes[0].make);
-          $("#planes-model").text(results.planes[0].model);
-          $("#planes-class").text(results.planes[0].planes_class);
-          $("#planes-airframe-hour").text(results.planes[0].airframe_hours);
-          $("#planes-engine-hours").text(results.planes[0].engine_hours);
-          $("#planes-price").text(results.planes[0].price);
-          $("#planes-user-id").text(results.planes[0].user_id);
-          $("#planes-date-posted").text(results.planes[0].date_posted);
-
-          /*-- Change img html tag source of $viewSpecificListing to display the image properly ---*/
-          $("#planes-image-path").attr("src", results.planes[0].img_path);
 
           /*-- Check if the currentUser is defined, if not set to null ---*/
           console.log("current user id:", currentUser ? currentUser.id : null);
@@ -599,11 +578,11 @@ $(() => {
 
           /*-- Show or hide edit and delete buttons based on ownership ---*/
           if (isCurrentUserOwner) {
-            $("#edit-button").show();
-            $("#delete-button").show();
+            $(".view-edit-delete-buttons").show();
+            $(".view-buy-like-buttons").hide();
           } else {
-            $("#edit-button").hide();
-            $("#delete-button").hide();
+            $(".view-edit-delete-buttons").hide();
+            $(".view-buy-like-buttons").show();
           }
 
         })
@@ -951,77 +930,6 @@ $(() => {
 ////////////////////////////////////////////////////////////////////////
 /// event listeners for plane listing buttons: VIEW DETAILS
 ////////////////////////////////////////////////////////////////////////
-//$planeListings.on("click", ".details-button", function () {
-//  console.log("View Detail button clicked!");
-//  console.log("Clicked element:", this);
-//  const clickedPlaneId = $(this).data("plane-id");
-//  console.log("plane id ---> ", clickedPlaneId);
-//
-//  /*-- Detach HTML templates from DOM---*/
-//  $planeListings.detach();
-//  $search.detach();
-//  $sell.detach();
-//
-//  /*-- Ajax call for full details of selected plane---*/
-//  $.ajax({
-//    method: "GET",
-//    url: "/api/planes/listings/" + clickedPlaneId,
-//  })
-//    .then(function (results) {
-//      console.log("planes:", results);
-//
-//      /*-- Append division header for DOM ---*/
-//      $viewSpecificListing.append(divider("PLANE LISTING FULL DETAILS"));
-//
-//      /*-- Append HTML template to $viewSpecificListing ---*/
-//      $viewSpecificListing.append($fullListingDetails);
-//
-//      /*-- Append $viewSpecificListing to DOM ---*/
-//      $("main").append($viewSpecificListing);
-//      $viewSpecificListing[0].scrollIntoView({ behavior: "smooth" });
-//
-//      /*-- Update HTML elements of the HTML Template of $viewSpecificListing ---*/
-//      $("#planes-title").text(results.planes[0].title);
-//      $("#planes-description").text(results.planes[0].description);
-//      $("#planes-condition").text(results.planes[0].condition);
-//      $("#planes-year").text(results.planes[0].year);
-//      $("#planes-make").text(results.planes[0].make);
-//      $("#planes-model").text(results.planes[0].model);
-//      $("#planes-class").text(results.planes[0].planes_class);
-//      $("#planes-airframe-hour").text(results.planes[0].airframe_hours);
-//      $("#planes-engine-hours").text(results.planes[0].engine_hours);
-//      $("#planes-price").text(results.planes[0].price);
-//      $("#planes-user-id").text(results.planes[0].user_id);
-//      $("#planes-date-posted").text(results.planes[0].date_posted);
-//
-//      /*-- Change img html tag source of $viewSpecificListing to display the image properly ---*/
-//      $("#planes-image-path").attr("src", results.planes[0].img_path);
-//
-//      /*-- Check if the currentUser is defined, if not set to null ---*/
-//      console.log("current user id:", currentUser ? currentUser.id : null);
-//
-//      /*-- Check if the current user is the owner of the plane ---*/
-//      const isCurrentUserOwner =
-//        currentUser && results.planes[0].user_id === currentUser.id;
-//
-//      /*-- Show or hide edit and delete buttons based on ownership ---*/
-//      if (isCurrentUserOwner) {
-//        $("#edit-button").show();
-//        $("#delete-button").show();
-//      } else {
-//        $("#edit-button").hide();
-//        $("#delete-button").hide();
-//      }
-//    })
-//    .catch((error) => {
-//      console.log(error.message);
-//    });
-//}); -- ORIGINAL CODE --- */
-
-
-////////////////////////////////////////////////////////////////////////
-/// event listeners for plane listing buttons: VIEW DETAILS
-////////////////////////////////////////////////////////////////////////
 $planeListings.on("click", ".details-button", function () {
   console.log("View Detail button clicked!");
   console.log("Clicked element:", this);
@@ -1033,9 +941,6 @@ $planeListings.on("click", ".details-button", function () {
   $search.detach();
   $sell.detach();
 
-
-
-
   /*-- Ajax call for full details of selected plane---*/
   $.ajax({
     method: "GET",
@@ -1043,35 +948,13 @@ $planeListings.on("click", ".details-button", function () {
   })
     .then(function (results) {
       console.log("planes:", results);
+
         /*-- Append $viewSpecificListing to DOM ---*/
-  $("main").append($viewSpecificListing);
+      $("main").append($viewSpecificListing);
+
+      /*-- Call function to render detailed listing ---*/
       renderDetailedListings(results.planes,"PLANE LISTING FULL DETAILS");
-      /*-- Append division header for DOM ---*/
-      //$viewSpecificListing.append(divider("PLANE LISTING FULL DETAILS"));
-
-      /*-- Append HTML template to $viewSpecificListing ---*/
-      //$viewSpecificListing.append($fullListingDetails);
-
-
-      //$viewSpecificListing[0].scrollIntoView({ behavior: "smooth" });
-
-      /*-- Update HTML elements of the HTML Template of $viewSpecificListing ---*/
-      //$("#planes-title").text(results.planes[0].title);
-      //$("#planes-description").text(results.planes[0].description);
-      //$("#planes-condition").text(results.planes[0].condition);
-      //$("#planes-year").text(results.planes[0].year);
-      //$("#planes-make").text(results.planes[0].make);
-      //$("#planes-model").text(results.planes[0].model);
-      //$("#planes-class").text(results.planes[0].planes_class);
-      //$("#planes-airframe-hour").text(results.planes[0].airframe_hours);
-      //$("#planes-engine-hours").text(results.planes[0].engine_hours);
-      //$("#planes-price").text(results.planes[0].price);
-      //$("#planes-user-id").text(results.planes[0].user_id);
-      //$("#planes-date-posted").text(results.planes[0].date_posted);
-
-      /*-- Change img html tag source of $viewSpecificListing to display the image properly ---*/
-      //$("#planes-image-path").attr("src", results.planes[0].img_path);
-
+      $viewSpecificListing[0].scrollIntoView({ behavior: "smooth" });
       /*-- Check if the currentUser is defined, if not set to null ---*/
       console.log("current user id:", currentUser ? currentUser.id : null);
 
