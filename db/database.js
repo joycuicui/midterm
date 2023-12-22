@@ -222,11 +222,11 @@ const deleteListing = function (id) {
       [id]
     )
     .then((result) => {
-      console.log("result.rows:", result.rows);
-      return result.rows;
+      return { success: true, message: "Listing deleted successfully" };
     })
     .catch((err) => {
       console.log(err.message);
+      return { success: false, message: "Error deleting listing" };
     });
 };
 
