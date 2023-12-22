@@ -124,8 +124,7 @@ const getMyListings = function (user_id, limit = 10) {
 const getMyLikes = function (user_id, limit = 10) {
   return db
     .query(
-      `
-        SELECT planes.*, users.name
+      `SELECT planes.*, users.name
         FROM planes
         JOIN favorites ON planes.id = favorites.listing_id
         JOIN users ON users.id = favorites.user_id
@@ -165,7 +164,7 @@ const getFeaturedList = function () {
 const getSpecificPlaneInfo = function (id) {
   return db
     .query(
-      `SELECT planes.*, users.name
+      `SELECT planes.*, users.email
     FROM planes
     JOIN users on users.id = user_id
     WHERE planes.id = $1;`,
@@ -230,6 +229,26 @@ const deleteListing = function (id) {
     });
 };
 
+/*--- Function to add new LIKES in favourites ---*/
+const createLike = function (user_id, listing_id) {
+  return db
+    .query(
+      `INSERT INTO favorites (user_id, listing_id)
+        VALUES ($1, $2) RETURNING *;`,
+      [
+        user_id,
+        listing_id
+      ]
+    )
+    .then((result) => {
+      return result.rows;
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+};
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /// MESSAGES
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -288,5 +307,6 @@ module.exports = {
   getMessages,
   postMessages,
   deleteListing,
-  addListing,
+  createLike,
+  addListing
 };
