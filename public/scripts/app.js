@@ -1058,6 +1058,7 @@ $viewSpecificListing.on("click", "#like-button", function () {
    })
   .then(function (results) {
     console.log("response received from api ---> ", results);
+    displayMsg('Success : Listing added to Favourites. Click on Favourites for complete list.');
   })
      .catch((error) => {
        console.log(error.message);
@@ -1086,6 +1087,7 @@ $planeListings.on("click", ".like-button", function () {
    })
   .then(function (results) {
     console.log("response received from api ---> ", results);
+    displayMsg('Success : Listing added to Favourites. Click on Favourites for complete list.');
   })
      .catch((error) => {
        console.log(error.message);
