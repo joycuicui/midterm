@@ -1019,7 +1019,7 @@ $viewSpecificListing.on("click", "#delete-button", function () {
         $viewSpecificListing.detach().empty();
         $("main").append($planeListings);
         loadListings();
-        $planeListings[0].scrollIntoView({ behavior: "smooth" });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
           }, 3000);
   })
    .catch((error) => {
@@ -1145,44 +1145,16 @@ $viewSpecificListing.on("click", "#buy-button", function () {
       displayMsg('Error: You must be logged in to BUY this.');
     }
 
-  ///*-- Detach HTML templates from DOM---*/
-  //$planeListings.detach();
-  //$search.detach();
-  //$sell.detach();
-//
-  ///*-- Ajax call for full details of selected plane---*/
-  //$.ajax({
-  //  method: "GET",
-  //  url: "/api/planes/listings/" + clickedPlaneId,
-  //})
-  //  .then(function (results) {
-  //    console.log("planes:", results);
-//
-  //      /*-- Append $viewSpecificListing to DOM ---*/
-  //    $("main").append($viewSpecificListing);
-//
-  //    /*-- Call function to render detailed listing ---*/
-  //    renderDetailedListings(results.planes,"PLANE LISTING FULL DETAILS");
-  //    $viewSpecificListing[0].scrollIntoView({ behavior: "smooth" });
-  //    /*-- Check if the currentUser is defined, if not set to null ---*/
-  //    console.log("current user id:", currentUser ? currentUser.id : null);
-//
-  //    /*-- Check if the current user is the owner of the plane ---*/
-  //    const isCurrentUserOwner =
-  //      currentUser && results.planes[0].user_id === currentUser.id;
-//
-  //    /*-- Show or hide edit and delete buttons based on ownership ---*/
-  //    if (isCurrentUserOwner) {
-  //      $(".view-edit-delete-buttons").show();
-  //      $(".view-buy-like-buttons").hide();
-  //    } else {
-  //      $(".view-edit-delete-buttons").hide();
-  //      $(".view-buy-like-buttons").show();
-  //    }
-  //  })
-  //  .catch((error) => {
-  //    console.log(error.message);
-  //  });
+    displayMsg('Thank you for buying and enjoy your new plane. NO RETURNS!😁😁😁');
+
+    setTimeout(function () {
+      $viewSpecificListing.detach().empty();
+      $("main").append($planeListings);
+      loadListings();
+      // Scroll the entire page to the top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 3000);
+
 });
 
 ////////////////////////////////////////////////////////////////////////
