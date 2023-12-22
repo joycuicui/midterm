@@ -3,6 +3,23 @@ const $header = $(".header");
 const $viewOurPlanes = $("#view-our-planes");
 
 let currentUser = null;
+const $msgContainer = $('#msg-container');
+
+// Function to display an app browser message
+
+  const displayMsg = function(message) {
+    $("#msg-container").addClass('visible-element');
+    $("#msg-container").text(message).slideDown();
+    const $mainElement = $('#main');
+    $mainElement[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  // Function to hide the error message
+  const hideMsg = function() {
+    $msgContainer.removeClass('visible-element');
+    $msgContainer.slideUp();
+    $msgContainer.text('');
+  };
 
 const updateHeader = function (user) {
   console.log("updating header with user:", user);
@@ -180,6 +197,7 @@ const divider = function (string) {
     <h2 class="divider-text">${string}</h2>
     <div class="divider-line"></div>
   </div>
+  <div id="msg-container"></div>
   `;
 };
 
@@ -415,6 +433,7 @@ $(() => {
   $search.detach();
   $sell.detach();
   $viewSpecificListing.detach().empty();
+  hideMsg();
   $("main").append($planeListings);
   loadListings();
 
@@ -430,6 +449,7 @@ $(() => {
     $signup.detach();
     $messages.empty();
     $viewSpecificListing.detach().empty();
+    hideMsg();
     $.ajax({
       method: "GET",
       url: `api/planes/all`,
@@ -454,6 +474,7 @@ $(() => {
     $messages.empty();
     $newmessage.empty();
     $viewSpecificListing.detach().empty();
+    hideMsg();
     $("main").append($planeListings);
     document.documentElement.scrollTo({
       top: 0,
@@ -475,6 +496,7 @@ $(() => {
     $messages.empty();
     $newmessage.empty();
     $viewSpecificListing.detach().empty();
+    hideMsg();
     $("main").append($search);
     $search[0].scrollIntoView({ behavior: "smooth" });
 
@@ -520,6 +542,7 @@ $(() => {
     $messages.empty();
     $newmessage.empty();
     $viewSpecificListing.detach().empty();
+    hideMsg();
     $("main").append($sell);
     $sell[0].scrollIntoView({ behavior: "smooth" });
 
@@ -598,6 +621,7 @@ $(() => {
     $messages.empty();
     $newmessage.empty();
     $viewSpecificListing.detach().empty();
+    hideMsg();
     $.ajax({
       method: "GET",
       url: `api/planes/listings/user`,
@@ -623,6 +647,7 @@ $(() => {
     $messages.empty();
     $newmessage.empty();
     $viewSpecificListing.detach().empty();
+    hideMsg();
     $.ajax({
       method: "GET",
       url: `api/planes/listings/user/likes`,
@@ -700,7 +725,6 @@ $(() => {
     `<button class="mes_compose_button">Compose New Message</button>`
   );
   const $newMsg = $(`
-  <div class= "new-msg-container">
   <form id="new-msg-Form">
         <label for="new-dropdown">Select a Listing:</label>
         <select id="new-dropdown" name="dropdown">
@@ -797,6 +821,7 @@ $(() => {
     $signup.detach();
     $messages.empty();
     $viewSpecificListing.detach().empty();
+    hideMsg();
     $("main").append($login);
     $login[0].scrollIntoView({ behavior: "smooth" });
     const $loginFrom = $(".login-form");
@@ -849,6 +874,7 @@ $(() => {
     $login.detach();
     $messages.empty();
     $viewSpecificListing.detach().empty();
+    hideMsg();
     $("main").append($signup);
     $signup[0].scrollIntoView({ behavior: "smooth" });
     const $signupFrom = $(".signup-form");
@@ -895,6 +921,7 @@ $(() => {
     $messages.empty();
     $signup.detach();
     $viewSpecificListing.detach().empty();
+    hideMsg();
     $("main").append($logout);
     $logout[0].scrollIntoView({ behavior: "smooth" });
     const $logoutButton = $(".logout-button");
@@ -932,6 +959,7 @@ $planeListings.on("click", ".details-button", function () {
   $planeListings.detach();
   $search.detach();
   $sell.detach();
+  hideMsg();
 
   /*-- Ajax call for full details of selected plane---*/
   $.ajax({
@@ -1011,7 +1039,8 @@ $viewSpecificListing.on("click", "#like-button", function () {
   const userId = currentUser ? currentUser.id : null;
 
   if (!userId){
-    console.log("You must be logged in to do this.");
+    console.log("You must be logged in to LIKE this.");
+    displayMsg('Error: You must be logged in to LIKE this.');
   }
 
   ///*-- Ajax call to insert new likes---*/
@@ -1059,7 +1088,8 @@ $planeListings.on("click", ".like-button", function () {
   const userId = currentUser ? currentUser.id : null;
 
   if (!userId){
-    console.log("You must be logged in to do this.");
+    console.log("You must be logged in to LIKE this.");
+    displayMsg('Error: You must be logged in to LIKE this.');
   }
 
   ///*-- Ajax call to insert new likes---*/
@@ -1110,7 +1140,8 @@ $viewSpecificListing.on("click", "#buy-button", function () {
     const userId = currentUser ? currentUser.id : null;
 
     if (!userId){
-      console.log("You must be logged in to do this.");
+      console.log("You must be logged in to BUY this.");
+      displayMsg('Error: You must be logged in to BUY this.');
     }
 
   ///*-- Detach HTML templates from DOM---*/

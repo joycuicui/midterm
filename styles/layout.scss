@@ -27,3 +27,12 @@ body {
   color: $grey-dark-2;
   background-color: #f1f1f1;
 }
+
+.visible-element {
+  color: red;
+  border: red;
+  border-style: solid;
+  font-size: larger;
+  align-self: center;
+  padding: 20px;
+}
