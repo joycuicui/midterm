@@ -126,24 +126,30 @@ router.post("/listings/:id", (req, res) => {
 /// POST /listings/:id/delete => delete a user listing
 //////////////////////////////////////////////////////////////////////////////////////
 // need a deleteListing function from database
-router.post("/listings/:id/delete", (req, res) => {
+router.delete("/listings/delete/:id", (req, res) => {
+  console.log("you reached the delete route!");
+  console.log("Received DELETE request for listing with ID:", req.params.id);
+
   const userId = req.session.userId;
   if (!userId) {
     return res.send("error for !userID in post/listings/:id/delete");
   }
+
   database
-    .deleteListing(req.body.planes_id)
-    .then((data) => res.send(data))
+    .deleteListing(req.params.id)
+    .then((data) => {
+    console.log("Deletion successful!");
+    res.send(data)})
+
     .catch((err) => {
-      console.error(err);
-      res.send(err);
-    });
+     console.error(err);
+     res.send(err);
+     });
 });
 
 //////////////////////////////////////////////////////////////////////////////////////
 /// POST /listings => create a new listing
 //////////////////////////////////////////////////////////////////////////////////////
-// need a addListing function from database
 router.post("/listings", (req, res) => {
   const userId = req.session.userId;
   if (!userId) {
