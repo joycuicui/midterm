@@ -186,10 +186,10 @@ const addListing = function (newListing) {
       `INSERT INTO planes (
         user_id, title, description, condition, year, make, model,
         planes_class, airframe_hours, engine_hours, img_path, price,
-        active, sold, featured, date_posted
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, CURRENT_TIMESTAMP) RETURNING *;`,
+        date_posted )
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, CURRENT_TIMESTAMP) RETURNING *;`,
       [
-        newListing.id,
+        newListing.userId,
         newListing.title,
         newListing.description,
         newListing.condition,
@@ -200,15 +200,13 @@ const addListing = function (newListing) {
         newListing.airframe_hours,
         newListing.engine_hours,
         newListing.img_path,
-        newListing.price,
-        newListing.active,
-        newListing.sold,
-        newListing.featured,
+        newListing.price
       ]
     )
     .then((result) => {
       console.log("Inserted listing:", result.rows[0]);
-      return result.rows[0];
+    //  return result.rows[0];
+    return { planes: [result.rows[0]] };
     })
     .catch((err) => {
       console.log(err.message);
