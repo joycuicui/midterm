@@ -123,9 +123,8 @@ router.post("/listings/:id", (req, res) => {
 });
 
 //////////////////////////////////////////////////////////////////////////////////////
-/// POST /listings/:id/delete => delete a user listing
+/// POST /listings/delete/:id => delete a user listing
 //////////////////////////////////////////////////////////////////////////////////////
-// need a deleteListing function from database
 router.delete("/listings/delete/:id", (req, res) => {
   console.log("you reached the delete route!");
   console.log("Received DELETE request for listing with ID:", req.params.id);

@@ -283,7 +283,7 @@ const createListing = function (plane) {
     </ul>
     <footer class="listing-footer">
       <button class="footer-button details-button" data-plane-id="${plane.id}">View details</button>
-      <button class="footer-button like-button">
+      <button class="footer-button like-button" data-plane-id="${plane.id}">
         <i class="fa-solid fa-heart"></i>
       </button>
     </footer>
@@ -982,18 +982,44 @@ $viewSpecificListing.on("click", "#delete-button", function () {
   //$search.detach();
   //$sell.detach();
 //$viewSpecificListing.();
-  ///*-- Ajax call for full details of selected plane---*/
+  ///*-- Ajax call deleting specific plane ---*/
   $.ajax({
     method: "DELETE",
     url: "/api/planes/listings/delete/" + clickedPlaneId,
   })
     .then(function (results) {
      console.log("response received from api ---> ", results);
+     // detach all html templates
+     // load my listings again.
 
   })
    .catch((error) => {
      console.log(error.message);
    });
+});
+
+////////////////////////////////////////////////////////////////////////
+/// event listeners for plane listing buttons: LIKE
+////////////////////////////////////////////////////////////////////////
+$viewSpecificListing.on("click", "#like-button", function () {
+  console.log("View LIKE button clicked!");
+  console.log("Clicked element:", this);
+  const clickedPlaneId = $(this).data("plane-id");
+  console.log("plane id ---> ", clickedPlaneId);
+
+  /*-- Check if the user is logged in---*/
+  const userId = currentUser ? currentUser.id : null;
+
+  if (!userId){
+    console.log("You must be logged in to do this.");
+  }
+
+  ///*-- Ajax call to insert new likes---*/
+//  $.ajax({
+//    method: "GET",
+//    url: "/users/likes/" + clickedPlaneId,
+//  })
+  //  .then(function (results) {
   //    console.log("planes:", results);
 //
   //      /*-- Append $viewSpecificListing to DOM ---*/
@@ -1023,25 +1049,24 @@ $viewSpecificListing.on("click", "#delete-button", function () {
   //  });
 });
 
-////////////////////////////////////////////////////////////////////////
-/// event listeners for plane listing buttons: LIKE
-////////////////////////////////////////////////////////////////////////
-$viewSpecificListing.on("click", "#like-button", function () {
+$planeListings.on("click", ".like-button", function () {
   console.log("View LIKE button clicked!");
   console.log("Clicked element:", this);
   const clickedPlaneId = $(this).data("plane-id");
   console.log("plane id ---> ", clickedPlaneId);
 
-  ///*-- Detach HTML templates from DOM---*/
-  //$planeListings.detach();
-  //$search.detach();
-  //$sell.detach();
-//
-  ///*-- Ajax call for full details of selected plane---*/
-  //$.ajax({
-  //  method: "GET",
-  //  url: "/api/planes/listings/" + clickedPlaneId,
-  //})
+  /*-- Check if the user is logged in---*/
+  const userId = currentUser ? currentUser.id : null;
+
+  if (!userId){
+    console.log("You must be logged in to do this.");
+  }
+
+  ///*-- Ajax call to insert new likes---*/
+//  $.ajax({
+//    method: "GET",
+//    url: "/users/likes/" + clickedPlaneId,
+//  })
   //  .then(function (results) {
   //    console.log("planes:", results);
 //
@@ -1080,6 +1105,13 @@ $viewSpecificListing.on("click", "#buy-button", function () {
   console.log("Clicked element:", this);
   const clickedPlaneId = $(this).data("plane-id");
   console.log("plane id ---> ", clickedPlaneId);
+
+    /*-- Check if the user is logged in---*/
+    const userId = currentUser ? currentUser.id : null;
+
+    if (!userId){
+      console.log("You must be logged in to do this.");
+    }
 
   ///*-- Detach HTML templates from DOM---*/
   //$planeListings.detach();
