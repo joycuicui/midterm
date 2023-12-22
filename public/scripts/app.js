@@ -3,23 +3,23 @@ const $header = $(".header");
 const $viewOurPlanes = $("#view-our-planes");
 
 let currentUser = null;
-const $msgContainer = $('#msg-container');
+const $msgContainer = $("#msg-container");
 
 // Function to display an app browser message
 
-  const displayMsg = function(message) {
-    $("#msg-container").addClass('visible-element');
-    $("#msg-container").text(message).slideDown();
-    const $mainElement = $('#main');
-    $mainElement[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
+const displayMsg = function (message) {
+  $("#msg-container").addClass("visible-element");
+  $("#msg-container").text(message).slideDown();
+  const $mainElement = $("#main");
+  $mainElement[0].scrollIntoView({ behavior: "smooth", block: "start" });
+};
 
-  // Function to hide the error message
-  const hideMsg = function() {
-    $msgContainer.removeClass('visible-element');
-    $msgContainer.slideUp();
-    $msgContainer.text('');
-  };
+// Function to hide the error message
+const hideMsg = function () {
+  $msgContainer.removeClass("visible-element");
+  $msgContainer.slideUp();
+  $msgContainer.text("");
+};
 
 const updateHeader = function (user) {
   console.log("updating header with user:", user);
@@ -203,7 +203,7 @@ const divider = function (string) {
 
 const $viewSpecificListing = $(".view-specific-listing");
 const fullListingDetails = function (plane) {
-return `
+  return `
   <div class="view-top">
   <h1 id="planes-title">${plane[0].title}</h1>
   </div>
@@ -245,7 +245,7 @@ return `
           <div class="second-five">
             <div class="planeClass">
               <span class="label">CLASS :</span>
-              <span class="value" id = "planes-class">${plane[0].plane_class}</span>
+              <span class="value" id = "planes-class">${plane[0].planes_class}</span>
             </div>
             <div class="planeAirFrameHrs">
               <span class="label">AIR FRAME HOURS :</span>
@@ -310,14 +310,13 @@ const createListing = function (plane) {
   `;
 };
 
-const renderDetailedListings = function (plane,sectionName) {
+const renderDetailedListings = function (plane, sectionName) {
   $viewSpecificListing.empty();
   $viewSpecificListing.append(divider(sectionName));
   console.log("passed plane value: ", plane);
   const $planeDetails = fullListingDetails(plane);
   $viewSpecificListing.append($planeDetails);
-
-}
+};
 
 const renderListings = function (listings, sectionName) {
   $planeListings.empty();
@@ -579,7 +578,7 @@ $(() => {
         .then(function (results) {
           console.log("success inserted data:", results);
           /*--- Clear all form fields --*/
-          $sellForm.find(':input').val('');
+          $sellForm.find(":input").val("");
           //$("main").append($planeListings);
           $sell.detach();
 
@@ -587,7 +586,7 @@ $(() => {
           $("main").append($viewSpecificListing);
 
           /*-- Call function to render detailed listing ---*/
-          renderDetailedListings(results.planes,"PLANE LISTING FULL DETAILS");
+          renderDetailedListings(results.planes, "PLANE LISTING FULL DETAILS");
 
           $viewSpecificListing[0].scrollIntoView({ behavior: "smooth" });
 
@@ -606,7 +605,6 @@ $(() => {
             $(".view-edit-delete-buttons").hide();
             $(".view-buy-like-buttons").show();
           }
-
         })
         .catch((error) => {
           console.log(error.message);
@@ -978,11 +976,11 @@ $planeListings.on("click", ".details-button", function () {
     .then(function (results) {
       console.log("planes:", results);
 
-        /*-- Append $viewSpecificListing to DOM ---*/
+      /*-- Append $viewSpecificListing to DOM ---*/
       $("main").append($viewSpecificListing);
 
       /*-- Call function to render detailed listing ---*/
-      renderDetailedListings(results.planes,"PLANE LISTING FULL DETAILS");
+      renderDetailedListings(results.planes, "PLANE LISTING FULL DETAILS");
       $viewSpecificListing[0].scrollIntoView({ behavior: "smooth" });
       /*-- Check if the currentUser is defined, if not set to null ---*/
       console.log("current user id:", currentUser ? currentUser.id : null);
@@ -1020,19 +1018,19 @@ $viewSpecificListing.on("click", "#delete-button", function () {
     url: "/api/planes/listings/delete/" + clickedPlaneId,
   })
     .then(function (results) {
-     console.log("response received from api ---> ", results);
-     displayMsg('Success : Listing successfully deleted.');
+      console.log("response received from api ---> ", results);
+      displayMsg("Success : Listing successfully deleted.");
       // Redirect to the home page after a delay (e.g., 3 seconds)
-        setTimeout(function () {
+      setTimeout(function () {
         $viewSpecificListing.detach().empty();
         $("main").append($planeListings);
         loadListings();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-          }, 3000);
-  })
-   .catch((error) => {
-     console.log(error.message);
-   });
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }, 3000);
+    })
+    .catch((error) => {
+      console.log(error.message);
+    });
 });
 
 ////////////////////////////////////////////////////////////////////////
@@ -1047,22 +1045,24 @@ $viewSpecificListing.on("click", "#like-button", function () {
   /*-- Check if the user is logged in---*/
   const userId = currentUser ? currentUser.id : null;
 
-  if (!userId){
+  if (!userId) {
     console.log("You must be logged in to LIKE this.");
-    displayMsg('Error: You must be logged in to LIKE this.');
+    displayMsg("Error: You must be logged in to LIKE this.");
   } else {
     /*-- Ajax call to insert new likes---*/
-  $.ajax({
-  method: "POST",
-   url: "/api/planes/listings/" + clickedPlaneId + "/likes",
-   })
-  .then(function (results) {
-    console.log("response received from api ---> ", results);
-    displayMsg('Success : Listing added to Favourites. Click on Favourites for complete list.');
-  })
-     .catch((error) => {
-       console.log(error.message);
-    });
+    $.ajax({
+      method: "POST",
+      url: "/api/planes/listings/" + clickedPlaneId + "/likes",
+    })
+      .then(function (results) {
+        console.log("response received from api ---> ", results);
+        displayMsg(
+          "Success : Listing added to Favourites. Click on Favourites for complete list."
+        );
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
   }
 });
 
@@ -1075,23 +1075,24 @@ $planeListings.on("click", ".like-button", function () {
   /*-- Check if the user is logged in---*/
   const userId = currentUser ? currentUser.id : null;
 
-  if (!userId){
+  if (!userId) {
     console.log("You must be logged in to LIKE this.");
-    displayMsg('Error: You must be logged in to LIKE this.');
-  }
-  else {
+    displayMsg("Error: You must be logged in to LIKE this.");
+  } else {
     /*-- Ajax call to insert new likes---*/
-  $.ajax({
-  method: "POST",
-   url: "/api/planes/listings/" + clickedPlaneId + "/likes",
-   })
-  .then(function (results) {
-    console.log("response received from api ---> ", results);
-    displayMsg('Success : Listing added to Favourites. Click on Favourites for complete list.');
-  })
-     .catch((error) => {
-       console.log(error.message);
-    });
+    $.ajax({
+      method: "POST",
+      url: "/api/planes/listings/" + clickedPlaneId + "/likes",
+    })
+      .then(function (results) {
+        console.log("response received from api ---> ", results);
+        displayMsg(
+          "Success : Listing added to Favourites. Click on Favourites for complete list."
+        );
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
   }
 });
 
@@ -1104,21 +1105,23 @@ $viewSpecificListing.on("click", "#buy-button", function () {
   const clickedPlaneId = $(this).data("plane-id");
   console.log("plane id ---> ", clickedPlaneId);
 
-    /*-- Check if the user is logged in---*/
-    const userId = currentUser ? currentUser.id : null;
-    console.log("current user id:", currentUser ? currentUser.id : null);
-    if (!userId){
-      console.log("You must be logged in to BUY this.");
-      displayMsg('Error: You must be logged in to BUY this.');
-    } else {
-      displayMsg('Thank you for buying and enjoy your new plane. NO RETURNS!😁😁😁');
-      setTimeout(function () {
-        $viewSpecificListing.detach().empty();
-        $("main").append($planeListings);
-        loadListings();
-        // Scroll the entire page to the top
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-          }, 3000);
+  /*-- Check if the user is logged in---*/
+  const userId = currentUser ? currentUser.id : null;
+  console.log("current user id:", currentUser ? currentUser.id : null);
+  if (!userId) {
+    console.log("You must be logged in to BUY this.");
+    displayMsg("Error: You must be logged in to BUY this.");
+  } else {
+    displayMsg(
+      "Thank you for buying and enjoy your new plane. NO RETURNS!😁😁😁"
+    );
+    setTimeout(function () {
+      $viewSpecificListing.detach().empty();
+      $("main").append($planeListings);
+      loadListings();
+      // Scroll the entire page to the top
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }, 3000);
   }
 });
 
