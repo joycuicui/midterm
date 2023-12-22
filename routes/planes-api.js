@@ -169,16 +169,19 @@ router.post("/listings", (req, res) => {
 //////////////////////////////////////////////////////////////////////////////////////
 /// POST /listings/:id/likes => add a listing to likes/favorites
 //////////////////////////////////////////////////////////////////////////////////////
-// need a createLike function from database
+// 
 router.post("/listings/:id/likes", (req, res) => {
+  console.log("you reached the Add new Like route!");
+  console.log("Received Like request for listing with ID:", req.params.id);
   const userId = req.session.userId;
+  const listingId = req.params.id;
   if (!userId) {
     return res.send("error for !userID in post/listings/:id/likes");
   }
   const likedListing = req.body;
   likedListing.user_id = userId;
   database
-    .createLike(likedListing)
+    .createLike(userId, listingId)
     .then((like) => res.send({ like }))
     .catch((err) => {
       console.error(err);

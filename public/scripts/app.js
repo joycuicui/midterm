@@ -258,7 +258,7 @@ return `
 
             <div class="planeSeller">
               <span class="label">SELLER :</span>
-              <span class="value" id = "planes-user-id">${plane[0].user_id}</span>
+              <span class="value" id = "planes-user-id">${plane[0].email}</span>
             </div>
             <div class="planePosted">
               <span class="label">DATE POSTED :</span>
@@ -300,8 +300,8 @@ const createListing = function (plane) {
       <li>ENGINE: ${plane.engine_hours} hours</li>
     </ul>
     <footer class="listing-footer">
-      <button class="footer-button details-button" data-plane-id="${plane.id}">View details</button>
-      <button class="footer-button like-button" data-plane-id="${plane.id}">
+      <button class="footer-button details-button" data-plane-id="${plane.id}" data-user-id="${plane.user_id}">View details</button>
+      <button class="footer-button like-button" data-plane-id="${plane.id}" data-user-id="${plane.user_id}">
         <i class="fa-solid fa-heart"></i>
       </button>
     </footer>
@@ -313,13 +313,9 @@ const createListing = function (plane) {
 const renderDetailedListings = function (plane,sectionName) {
   $viewSpecificListing.empty();
   $viewSpecificListing.append(divider(sectionName));
-  //const container1 = $viewSpecificListing;
-  //console.log("1 working html container :",container1);
   console.log("passed plane value: ", plane);
   const $planeDetails = fullListingDetails(plane);
   $viewSpecificListing.append($planeDetails);
-  //const container2 = $viewSpecificListing;
-  //console.log("2 working html container :",container2);
 
 }
 
@@ -333,9 +329,19 @@ const renderListings = function (listings, sectionName) {
   console.log("listings:", listings);
 
   listings.forEach((plane) => {
-    console.log("I am inside here bunny!");
-    const $listing = createListing(plane);
+    const $listing = $(createListing(plane));
     $planeListings.append($listing);
+    /*-- Check if the currentUser is defined, if not set to null ---*/
+    console.log("current user id:", currentUser ? currentUser.id : null);
+    /*-- Check if the current user is the owner of the plane ---*/
+    const isCurrentUserOwner = currentUser && plane.user_id === currentUser.id;
+    /*-- Show or hide edit and delete buttons based on ownership ---*/
+    const $likeButton = $listing.find(".like-button");
+    if (isCurrentUserOwner) {
+      $likeButton.hide();
+    } else {
+      $likeButton.show();
+    }
   });
 };
 
@@ -631,6 +637,7 @@ $(() => {
       $("main").append($planeListings);
       renderListings(results.listings, "my listings");
       $planeListings[0].scrollIntoView({ behavior: "smooth" });
+      $(".like-button").hide();
     });
   });
 
@@ -658,6 +665,7 @@ $(() => {
 
       renderListings(results.likedListings, "my favorite planes");
       $planeListings[0].scrollIntoView({ behavior: "smooth" });
+      $(".like-button").hide();
     });
   });
 
@@ -1042,41 +1050,19 @@ $viewSpecificListing.on("click", "#like-button", function () {
   if (!userId){
     console.log("You must be logged in to LIKE this.");
     displayMsg('Error: You must be logged in to LIKE this.');
+  } else {
+    /*-- Ajax call to insert new likes---*/
+  $.ajax({
+  method: "POST",
+   url: "/api/planes/listings/" + clickedPlaneId + "/likes",
+   })
+  .then(function (results) {
+    console.log("response received from api ---> ", results);
+  })
+     .catch((error) => {
+       console.log(error.message);
+    });
   }
-
-  ///*-- Ajax call to insert new likes---*/
-//  $.ajax({
-//    method: "GET",
-//    url: "/users/likes/" + clickedPlaneId,
-//  })
-  //  .then(function (results) {
-  //    console.log("planes:", results);
-//
-  //      /*-- Append $viewSpecificListing to DOM ---*/
-  //    $("main").append($viewSpecificListing);
-//
-  //    /*-- Call function to render detailed listing ---*/
-  //    renderDetailedListings(results.planes,"PLANE LISTING FULL DETAILS");
-  //    $viewSpecificListing[0].scrollIntoView({ behavior: "smooth" });
-  //    /*-- Check if the currentUser is defined, if not set to null ---*/
-  //    console.log("current user id:", currentUser ? currentUser.id : null);
-//
-  //    /*-- Check if the current user is the owner of the plane ---*/
-  //    const isCurrentUserOwner =
-  //      currentUser && results.planes[0].user_id === currentUser.id;
-//
-  //    /*-- Show or hide edit and delete buttons based on ownership ---*/
-  //    if (isCurrentUserOwner) {
-  //      $(".view-edit-delete-buttons").show();
-  //      $(".view-buy-like-buttons").hide();
-  //    } else {
-  //      $(".view-edit-delete-buttons").hide();
-  //      $(".view-buy-like-buttons").show();
-  //    }
-  //  })
-  //  .catch((error) => {
-  //    console.log(error.message);
-  //  });
 });
 
 $planeListings.on("click", ".like-button", function () {
@@ -1092,40 +1078,19 @@ $planeListings.on("click", ".like-button", function () {
     console.log("You must be logged in to LIKE this.");
     displayMsg('Error: You must be logged in to LIKE this.');
   }
-
-  ///*-- Ajax call to insert new likes---*/
-//  $.ajax({
-//    method: "GET",
-//    url: "/users/likes/" + clickedPlaneId,
-//  })
-  //  .then(function (results) {
-  //    console.log("planes:", results);
-//
-  //      /*-- Append $viewSpecificListing to DOM ---*/
-  //    $("main").append($viewSpecificListing);
-//
-  //    /*-- Call function to render detailed listing ---*/
-  //    renderDetailedListings(results.planes,"PLANE LISTING FULL DETAILS");
-  //    $viewSpecificListing[0].scrollIntoView({ behavior: "smooth" });
-  //    /*-- Check if the currentUser is defined, if not set to null ---*/
-  //    console.log("current user id:", currentUser ? currentUser.id : null);
-//
-  //    /*-- Check if the current user is the owner of the plane ---*/
-  //    const isCurrentUserOwner =
-  //      currentUser && results.planes[0].user_id === currentUser.id;
-//
-  //    /*-- Show or hide edit and delete buttons based on ownership ---*/
-  //    if (isCurrentUserOwner) {
-  //      $(".view-edit-delete-buttons").show();
-  //      $(".view-buy-like-buttons").hide();
-  //    } else {
-  //      $(".view-edit-delete-buttons").hide();
-  //      $(".view-buy-like-buttons").show();
-  //    }
-  //  })
-  //  .catch((error) => {
-  //    console.log(error.message);
-  //  });
+  else {
+    /*-- Ajax call to insert new likes---*/
+  $.ajax({
+  method: "POST",
+   url: "/api/planes/listings/" + clickedPlaneId + "/likes",
+   })
+  .then(function (results) {
+    console.log("response received from api ---> ", results);
+  })
+     .catch((error) => {
+       console.log(error.message);
+    });
+  }
 });
 
 ////////////////////////////////////////////////////////////////////////
@@ -1139,22 +1104,20 @@ $viewSpecificListing.on("click", "#buy-button", function () {
 
     /*-- Check if the user is logged in---*/
     const userId = currentUser ? currentUser.id : null;
-
+    console.log("current user id:", currentUser ? currentUser.id : null);
     if (!userId){
       console.log("You must be logged in to BUY this.");
       displayMsg('Error: You must be logged in to BUY this.');
-    }
-
-    displayMsg('Thank you for buying and enjoy your new plane. NO RETURNS!😁😁😁');
-
-    setTimeout(function () {
-      $viewSpecificListing.detach().empty();
-      $("main").append($planeListings);
-      loadListings();
-      // Scroll the entire page to the top
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-        }, 3000);
-
+    } else {
+      displayMsg('Thank you for buying and enjoy your new plane. NO RETURNS!😁😁😁');
+      setTimeout(function () {
+        $viewSpecificListing.detach().empty();
+        $("main").append($planeListings);
+        loadListings();
+        // Scroll the entire page to the top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+          }, 3000);
+  }
 });
 
 ////////////////////////////////////////////////////////////////////////
@@ -1166,43 +1129,4 @@ $viewSpecificListing.on("click", "#edit-button", function () {
   console.log("Clicked element:", this);
   const clickedPlaneId = $(this).data("plane-id");
   console.log("plane id ---> ", clickedPlaneId);
-
-  ///*-- Detach HTML templates from DOM---*/
-  //$planeListings.detach();
-  //$search.detach();
-  //$sell.detach();
-//
-  ///*-- Ajax call for full details of selected plane---*/
-  //$.ajax({
-  //  method: "GET",
-  //  url: "/api/planes/listings/" + clickedPlaneId,
-  //})
-  //  .then(function (results) {
-  //    console.log("planes:", results);
-//
-  //      /*-- Append $viewSpecificListing to DOM ---*/
-  //    $("main").append($viewSpecificListing);
-//
-  //    /*-- Call function to render detailed listing ---*/
-  //    renderDetailedListings(results.planes,"PLANE LISTING FULL DETAILS");
-  //    $viewSpecificListing[0].scrollIntoView({ behavior: "smooth" });
-  //    /*-- Check if the currentUser is defined, if not set to null ---*/
-  //    console.log("current user id:", currentUser ? currentUser.id : null);
-//
-  //    /*-- Check if the current user is the owner of the plane ---*/
-  //    const isCurrentUserOwner =
-  //      currentUser && results.planes[0].user_id === currentUser.id;
-//
-  //    /*-- Show or hide edit and delete buttons based on ownership ---*/
-  //    if (isCurrentUserOwner) {
-  //      $(".view-edit-delete-buttons").show();
-  //      $(".view-buy-like-buttons").hide();
-  //    } else {
-  //      $(".view-edit-delete-buttons").hide();
-  //      $(".view-buy-like-buttons").show();
-  //    }
-  //  })
-  //  .catch((error) => {
-  //    console.log(error.message);
-  //  });
 });
