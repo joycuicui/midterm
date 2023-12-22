@@ -184,76 +184,79 @@ const divider = function (string) {
 };
 
 const $viewSpecificListing = $(".view-specific-listing");
-const $fullListingDetails = $(`
+const fullListingDetails = function (plane) {
+return `
   <div class="view-top">
-  <h2 id="planes-title"></h2>
+  <h1 id="planes-title">${plane[0].title}</h1>
   </div>
   <div class="view-bottom">
     <div class="plane-image">
       <img class="view-right"
-        src=""
+        src="${plane[0].img_path}"
         id = "planes-image-path"
         alt="plane listing image"
       />
     </div>
     <div class="view-right">
         <div class="planeDesc">
-            <span class="value" id = "planes-description"></span>
+            <span class="value" id = "planes-description">${plane[0].description}</span>
         </div>
         <div class="ten-details">
           <div class="first-five">
             <div class="planesPrice">
               <span class="label">PRICE :</span>
-              <span class="value" id = "planes-price"></span>
+              <span class="value" id = "planes-price">${plane[0].price}</span>
             </div>
             <div class="planeYear">
               <span class="label">YEAR :</span>
-              <span class="value" id = "planes-year"></span>
+              <span class="value" id = "planes-year">${plane[0].year}</span>
             </div>
             <div class="planeMake">
               <span class="label">MAKE :</span>
-              <span class="value" id = "planes-make"></span>
+              <span class="value" id = "planes-make">${plane[0].make}</span>
             </div>
             <div class="planeModel">
               <span class="label">MODEL:</span>
-              <span class="value" id = "planes-model"></span>
+              <span class="value" id = "planes-model">${plane[0].model}</span>
             </div>
             <div class="planeCondition">
-              <span class="label">CONDIITON :</span>
-              <span class="value" id = "planes-condition"></span>
+              <span class="label">CONDITION :</span>
+              <span class="value" id = "planes-condition">${plane[0].condition}</span>
             </div>
           </div>
           <div class="second-five">
             <div class="planeClass">
               <span class="label">CLASS :</span>
-              <span class="value" id = "planes-class"></span>
+              <span class="value" id = "planes-class">${plane[0].plane_class}</span>
             </div>
             <div class="planeAirFrameHrs">
               <span class="label">AIR FRAME HOURS :</span>
-              <span class="value" id = "planes-airframe-hours"></span>
+              <span class="value" id = "planes-airframe-hours">${plane[0].airframe_hours}</span>
             </div>
             <div class="planeEngineHrs">
               <span class="label">ENGINE HOURS :</span>
-              <span class="value" id = "planes-engine-hours"></span>
+              <span class="value" id = "planes-engine-hours">${plane[0].engine_hours}</span>
             </div>
 
             <div class="planeSeller">
               <span class="label">SELLER :</span>
-              <span class="value" id = "planes-user-id"></span>
+              <span class="value" id = "planes-user-id">${plane[0].user_id}</span>
             </div>
             <div class="planePosted">
               <span class="label">DATE POSTED :</span>
-              <span class="value" id = "planes-date-posted"></span>
+              <span class="value" id = "planes-date-posted">${plane[0].date_posted}</span>
             </div>
           </div>
       </div>
-        <div class="view-action-buttons">
+        <div class="view-buy-like-buttons">
             <form action="" method="">
               <button class="footer-button buy-button" id="buy-button">BUY</button>
             </form>
             <form action="" method="">
               <button class="footer-button like-button" id="like-button"><i class="fa-solid fa-heart"></i></button>
             </form>
+        </div>
+        <div class="view-edit-delete-buttons">
             <form action="" method="">
               <button class="footer-button edit-button" id="edit-button">EDIT</button>
             </form>
@@ -263,7 +266,8 @@ const $fullListingDetails = $(`
       </div>
   </div>
 </div>
-`);
+`;
+};
 
 const createListing = function (plane) {
   return `
@@ -295,6 +299,19 @@ const createListing = function (plane) {
 </article>
   `;
 };
+
+const renderDetailedListings = function (plane,sectionName) {
+  $viewSpecificListing.empty();
+  $viewSpecificListing.append(divider(sectionName));
+  //const container1 = $viewSpecificListing;
+  //console.log("1 working html container :",container1);
+  console.log("passed plane value: ", plane);
+  const $planeDetails = fullListingDetails(plane);
+  $viewSpecificListing.append($planeDetails);
+  //const container2 = $viewSpecificListing;
+  //console.log("2 working html container :",container2);
+
+}
 
 const renderListings = function (listings, sectionName) {
   $planeListings.empty();
@@ -934,6 +951,77 @@ $(() => {
 ////////////////////////////////////////////////////////////////////////
 /// event listeners for plane listing buttons: VIEW DETAILS
 ////////////////////////////////////////////////////////////////////////
+//$planeListings.on("click", ".details-button", function () {
+//  console.log("View Detail button clicked!");
+//  console.log("Clicked element:", this);
+//  const clickedPlaneId = $(this).data("plane-id");
+//  console.log("plane id ---> ", clickedPlaneId);
+//
+//  /*-- Detach HTML templates from DOM---*/
+//  $planeListings.detach();
+//  $search.detach();
+//  $sell.detach();
+//
+//  /*-- Ajax call for full details of selected plane---*/
+//  $.ajax({
+//    method: "GET",
+//    url: "/api/planes/listings/" + clickedPlaneId,
+//  })
+//    .then(function (results) {
+//      console.log("planes:", results);
+//
+//      /*-- Append division header for DOM ---*/
+//      $viewSpecificListing.append(divider("PLANE LISTING FULL DETAILS"));
+//
+//      /*-- Append HTML template to $viewSpecificListing ---*/
+//      $viewSpecificListing.append($fullListingDetails);
+//
+//      /*-- Append $viewSpecificListing to DOM ---*/
+//      $("main").append($viewSpecificListing);
+//      $viewSpecificListing[0].scrollIntoView({ behavior: "smooth" });
+//
+//      /*-- Update HTML elements of the HTML Template of $viewSpecificListing ---*/
+//      $("#planes-title").text(results.planes[0].title);
+//      $("#planes-description").text(results.planes[0].description);
+//      $("#planes-condition").text(results.planes[0].condition);
+//      $("#planes-year").text(results.planes[0].year);
+//      $("#planes-make").text(results.planes[0].make);
+//      $("#planes-model").text(results.planes[0].model);
+//      $("#planes-class").text(results.planes[0].planes_class);
+//      $("#planes-airframe-hour").text(results.planes[0].airframe_hours);
+//      $("#planes-engine-hours").text(results.planes[0].engine_hours);
+//      $("#planes-price").text(results.planes[0].price);
+//      $("#planes-user-id").text(results.planes[0].user_id);
+//      $("#planes-date-posted").text(results.planes[0].date_posted);
+//
+//      /*-- Change img html tag source of $viewSpecificListing to display the image properly ---*/
+//      $("#planes-image-path").attr("src", results.planes[0].img_path);
+//
+//      /*-- Check if the currentUser is defined, if not set to null ---*/
+//      console.log("current user id:", currentUser ? currentUser.id : null);
+//
+//      /*-- Check if the current user is the owner of the plane ---*/
+//      const isCurrentUserOwner =
+//        currentUser && results.planes[0].user_id === currentUser.id;
+//
+//      /*-- Show or hide edit and delete buttons based on ownership ---*/
+//      if (isCurrentUserOwner) {
+//        $("#edit-button").show();
+//        $("#delete-button").show();
+//      } else {
+//        $("#edit-button").hide();
+//        $("#delete-button").hide();
+//      }
+//    })
+//    .catch((error) => {
+//      console.log(error.message);
+//    });
+//}); -- ORIGINAL CODE --- */
+
+
+////////////////////////////////////////////////////////////////////////
+/// event listeners for plane listing buttons: VIEW DETAILS
+////////////////////////////////////////////////////////////////////////
 $planeListings.on("click", ".details-button", function () {
   console.log("View Detail button clicked!");
   console.log("Clicked element:", this);
@@ -945,6 +1033,9 @@ $planeListings.on("click", ".details-button", function () {
   $search.detach();
   $sell.detach();
 
+
+
+
   /*-- Ajax call for full details of selected plane---*/
   $.ajax({
     method: "GET",
@@ -952,33 +1043,34 @@ $planeListings.on("click", ".details-button", function () {
   })
     .then(function (results) {
       console.log("planes:", results);
-
+        /*-- Append $viewSpecificListing to DOM ---*/
+  $("main").append($viewSpecificListing);
+      renderDetailedListings(results.planes,"PLANE LISTING FULL DETAILS");
       /*-- Append division header for DOM ---*/
-      $viewSpecificListing.append(divider("PLANE LISTING FULL DETAILS"));
+      //$viewSpecificListing.append(divider("PLANE LISTING FULL DETAILS"));
 
       /*-- Append HTML template to $viewSpecificListing ---*/
-      $viewSpecificListing.append($fullListingDetails);
+      //$viewSpecificListing.append($fullListingDetails);
 
-      /*-- Append $viewSpecificListing to DOM ---*/
-      $("main").append($viewSpecificListing);
-      $viewSpecificListing[0].scrollIntoView({ behavior: "smooth" });
+
+      //$viewSpecificListing[0].scrollIntoView({ behavior: "smooth" });
 
       /*-- Update HTML elements of the HTML Template of $viewSpecificListing ---*/
-      $("#planes-title").text(results.planes[0].title);
-      $("#planes-description").text(results.planes[0].description);
-      $("#planes-condition").text(results.planes[0].condition);
-      $("#planes-year").text(results.planes[0].year);
-      $("#planes-make").text(results.planes[0].make);
-      $("#planes-model").text(results.planes[0].model);
-      $("#planes-class").text(results.planes[0].planes_class);
-      $("#planes-airframe-hour").text(results.planes[0].airframe_hours);
-      $("#planes-engine-hours").text(results.planes[0].engine_hours);
-      $("#planes-price").text(results.planes[0].price);
-      $("#planes-user-id").text(results.planes[0].user_id);
-      $("#planes-date-posted").text(results.planes[0].date_posted);
+      //$("#planes-title").text(results.planes[0].title);
+      //$("#planes-description").text(results.planes[0].description);
+      //$("#planes-condition").text(results.planes[0].condition);
+      //$("#planes-year").text(results.planes[0].year);
+      //$("#planes-make").text(results.planes[0].make);
+      //$("#planes-model").text(results.planes[0].model);
+      //$("#planes-class").text(results.planes[0].planes_class);
+      //$("#planes-airframe-hour").text(results.planes[0].airframe_hours);
+      //$("#planes-engine-hours").text(results.planes[0].engine_hours);
+      //$("#planes-price").text(results.planes[0].price);
+      //$("#planes-user-id").text(results.planes[0].user_id);
+      //$("#planes-date-posted").text(results.planes[0].date_posted);
 
       /*-- Change img html tag source of $viewSpecificListing to display the image properly ---*/
-      $("#planes-image-path").attr("src", results.planes[0].img_path);
+      //$("#planes-image-path").attr("src", results.planes[0].img_path);
 
       /*-- Check if the currentUser is defined, if not set to null ---*/
       console.log("current user id:", currentUser ? currentUser.id : null);
@@ -989,11 +1081,11 @@ $planeListings.on("click", ".details-button", function () {
 
       /*-- Show or hide edit and delete buttons based on ownership ---*/
       if (isCurrentUserOwner) {
-        $("#edit-button").show();
-        $("#delete-button").show();
+        $(".view-edit-delete-buttons").show();
+        $(".view-buy-like-buttons").hide();
       } else {
-        $("#edit-button").hide();
-        $("#delete-button").hide();
+        $(".view-edit-delete-buttons").hide();
+        $(".view-buy-like-buttons").show();
       }
     })
     .catch((error) => {
